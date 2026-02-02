@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="doctor_ivanov" model="hr.hospital.doctor">
+        <field name="name">Dr. Ivan Ivanov</field>
+        <field name="specialization">Therapist</field>
+        <field name="phone">+380501234567</field>
+        <field name="email">ivanov@gmail.com</field>
+    </record>
+
+    <record id="doctor_petrenko" model="hr.hospital.doctor">
+        <field name="name">Dr. Olena Petrenko</field>
+        <field name="specialization">Cardiologist</field>
+        <field name="phone">+380502345678</field>
+        <field name="email">petrenko@gmail.com</field>
+        <field name="mentor_id" ref="doctor_ivanov"/>
+    </record>
+
+    <record id="doctor_sydorenko" model="hr.hospital.doctor">
+        <field name="name">Dr. Mykola Sydorenko</field>
+        <field name="specialization">Endocrinologist</field>
+        <field name="phone">+380503456789</field>
+        <field name="email">sydorenko@gmail.com</field>
+        <field name="mentor_id" ref="doctor_ivanov"/>
+    </record>
+</odoo>

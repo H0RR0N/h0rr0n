@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="patient_kovalenko" model="hr.hospital.patient">
+        <field name="name">Anna Kovalenko</field>
+        <field name="birthdate">1985-03-15</field>
+        <field name="phone">+380671234567</field>
+        <field name="email">kovalenko@gmail.com</field>
+        <field name="doctor_id" ref="doctor_ivanov"/>
+    </record>
+
+    <record id="patient_bondarenko" model="hr.hospital.patient">
+        <field name="name">Petro Bondarenko</field>
+        <field name="birthdate">1970-07-22</field>
+        <field name="phone">+380672345678</field>
+        <field name="email">bondarenko@gmail.com</field>
+        <field name="doctor_id" ref="doctor_petrenko"/>
+    </record>
+
+    <record id="patient_shevchenko" model="hr.hospital.patient">
+        <field name="name">Maria Shevchenko</field>
+        <field name="birthdate">1992-11-08</field>
+        <field name="phone">+380673456789</field>
+        <field name="email">shevchenko@gmail.com</field>
+        <field name="doctor_id" ref="doctor_sydorenko"/>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="disease_flu" model="hr.hospital.disease">
+        <field name="name">Influenza</field>
+        <field name="code">FLU</field>
+        <field name="description">Seasonal influenza virus infection</field>
+    </record>
+
+    <record id="disease_diabetes" model="hr.hospital.disease">
+        <field name="name">Diabetes</field>
+        <field name="code">DIA</field>
+        <field name="description">Chronic metabolic disease</field>
+    </record>
+
+    <record id="disease_hypertension" model="hr.hospital.disease">
+        <field name="name">Hypertension</field>
+        <field name="code">HYP</field>
+        <field name="description">High blood pressure condition</field>
+    </record>
+</odoo>
