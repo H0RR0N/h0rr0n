@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+      Demo schedules:
+      - Basic weekday working hours for all doctors.
+      - A couple of specific-day blocks (vacation/conference) to demonstrate availability validation.
+    -->
+    <record id="hr_hospital_schedule_doctor_ivanov_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_ivanov_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_ivanov_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_ivanov_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_ivanov_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_petrenko_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_petrenko_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_petrenko_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_petrenko_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_petrenko_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_sydorenko_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_sydorenko_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_sydorenko_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_sydorenko_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_sydorenko_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_shevchenko_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_shevchenko_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_shevchenko_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_shevchenko_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_shevchenko_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_kravets_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_kravets_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_kravets_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_kravets_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_kravets_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_melnyk_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_melnyk_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_melnyk_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_melnyk_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_melnyk_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_koval_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_koval_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_koval_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_koval_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_koval_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_savchuk_mon" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
+        <field name="weekday">0</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_savchuk_tue" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
+        <field name="weekday">1</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_savchuk_wed" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
+        <field name="weekday">2</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_savchuk_thu" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
+        <field name="weekday">3</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+    <record id="hr_hospital_schedule_doctor_intern_savchuk_fri" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
+        <field name="weekday">4</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">work</field>
+    </record>
+
+    <!-- Specific-day blocks (do not overlap with demo visits) -->
+    <record id="hr_hospital_schedule_doctor_ivanov_vacation_2026_02_13" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="date">2026-02-13</field>
+        <field name="time_start">9.0</field>
+        <field name="time_end">17.0</field>
+        <field name="schedule_type">vacation</field>
+        <field name="note">Vacation day</field>
+    </record>
+
+    <record id="hr_hospital_schedule_doctor_petrenko_conference_2026_02_26" model="hr.hospital.doctor.schedule">
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="date">2026-02-26</field>
+        <field name="time_start">10.0</field>
+        <field name="time_end">15.0</field>
+        <field name="schedule_type">conference</field>
+        <field name="note">Medical conference</field>
+    </record>
+</odoo>

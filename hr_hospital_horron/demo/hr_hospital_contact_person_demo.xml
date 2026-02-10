@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+      Demo contact persons:
+      - Written like real emergency contacts (family / close friends).
+      - Emails use a consistent fake domain.
+      - Countries are mixed a bit to support reporting filters by citizenship.
+    -->
+
+    <record id="hr_hospital_contact_person_1" model="hr.hospital.contact.person">
+        <field name="last_name">Kovalchuk</field>
+        <field name="first_name">Anna</field>
+        <field name="phone">+380631111111</field>
+        <field name="email">anna.kovalchuk@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.ua"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_2" model="hr.hospital.contact.person">
+        <field name="last_name">Bondarenko</field>
+        <field name="first_name">Oleh</field>
+        <field name="phone">+380632222222</field>
+        <field name="email">oleh.bondarenko@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.ua"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_3" model="hr.hospital.contact.person">
+        <field name="last_name">Shevchuk</field>
+        <field name="first_name">Nazar</field>
+        <field name="phone">+380633333333</field>
+        <field name="email">nazar.shevchuk@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.pl"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_4" model="hr.hospital.contact.person">
+        <field name="last_name">Marin</field>
+        <field name="first_name">Sofia</field>
+        <field name="phone">+380634444444</field>
+        <field name="email">sofia.marin@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.ua"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_5" model="hr.hospital.contact.person">
+        <field name="last_name">Ivanenko</field>
+        <field name="first_name">Ihor</field>
+        <field name="phone">+380635555555</field>
+        <field name="email">ihor.ivanenko@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.ua"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_6" model="hr.hospital.contact.person">
+        <field name="last_name">Brown</field>
+        <field name="first_name">Emily</field>
+        <field name="phone">+12025550111</field>
+        <field name="email">emily.brown@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.us"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_7" model="hr.hospital.contact.person">
+        <field name="last_name">Schmidt</field>
+        <field name="first_name">Lukas</field>
+        <field name="phone">+4915111122233</field>
+        <field name="email">lukas.schmidt@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.de"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_8" model="hr.hospital.contact.person">
+        <field name="last_name">Nowak</field>
+        <field name="first_name">Agnieszka</field>
+        <field name="phone">+48500111222</field>
+        <field name="email">agnieszka.nowak@demo-hospital.example</field>
+        <field name="citizenship_country_id" ref="base.pl"/>
+    </record>
+</odoo>
