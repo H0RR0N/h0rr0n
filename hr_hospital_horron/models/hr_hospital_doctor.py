@@ -113,14 +113,13 @@ class HospitalDoctor(models.Model):
             if mentor:
                 self.mentor_id = mentor
 
-    def write(self, vals):
-        if vals.get("active") is False:
-            active_visits = self.env["hr.hospital.visit"].search_count(
-                [
-                    ("doctor_id", "in", self.ids),
-                    ("state", "=", "planned"),
-                ]
-            )
-            if active_visits:
-                raise ValidationError(_("Cannot archive doctors with active visits."))
-        return super().write(vals)
+    def action_archive(self):
+        active_visits = self.env["hr.hospital.visit"].search_count(
+            [
+                ("doctor_id", "in", self.ids),
+                ("state", "=", "planned"),
+            ]
+        )
+        if active_visits:
+            raise ValidationError(_("Cannot archive doctors with active visits."))
+        return super().action_archive()
