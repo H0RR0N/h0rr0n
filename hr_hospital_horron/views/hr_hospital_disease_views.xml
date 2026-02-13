@@ -7,6 +7,10 @@
             <list>
                 <field name="name"/>
                 <field name="code"/>
+                <field name="icd10_code"/>
+                <field name="danger_level"/>
+                <field name="is_contagious"/>
+                <field name="parent_id"/>
             </list>
         </field>
     </record>
@@ -18,11 +22,26 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="code"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="icd10_code"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group>
+                            <field name="danger_level"/>
+                            <field name="is_contagious"/>
+                        </group>
                     </group>
                     <group>
+                        <field name="symptoms"/>
                         <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="region_country_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="child_ids"/>
                     </group>
                 </sheet>
             </form>

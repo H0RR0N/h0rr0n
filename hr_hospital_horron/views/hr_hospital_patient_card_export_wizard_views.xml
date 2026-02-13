@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_hospital_patient_card_export_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.hospital.patient.card.export.wizard.view.form</field>
+        <field name="model">hr.hospital.patient.card.export.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="patient_id"/>
+                        <field name="language_id"/>
+                    </group>
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group>
+                        <field name="include_diagnoses"/>
+                        <field name="include_recommendations"/>
+                    </group>
+                    <group>
+                        <field name="export_format"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_export" type="object" string="Export" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_hospital_patient_card_export_wizard_action" model="ir.actions.act_window">
+        <field name="name">Patient Card Export</field>
+        <field name="res_model">hr.hospital.patient.card.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_patient_id': active_id}</field>
+    </record>
+</odoo>

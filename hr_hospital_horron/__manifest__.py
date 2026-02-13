@@ -1,12 +1,18 @@
 {
     "name": "HR Hospital",
-    "version": "19.0.2.0.0",
+    "version": "19.0.3.0.0",
+    "summary": "Hospital workflow: patients, doctors, visits, diagnoses, and schedules.",
+    "description": (
+        "Compact training module for Odoo 19 hospital workflow with patients, doctors, "
+        "diseases, visits, diagnoses, schedules, utility wizards, and demo data."
+    ),
     "category": "Customization",
     "author": "H0RR0N",
     "license": "LGPL-3",
     "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
+        "data/hr_hospital_sequence_data.xml",
         "views/hr_hospital_mass_reassign_doctor_wizard_views.xml",
         "views/hr_hospital_disease_report_wizard_views.xml",
         "views/hr_hospital_reschedule_visit_wizard_views.xml",

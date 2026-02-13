@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_hospital_contact_person_view_list" model="ir.ui.view">
+        <field name="name">hr.hospital.contact.person.view.list</field>
+        <field name="model">hr.hospital.contact.person</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="full_name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="language_id"/>
+                <field name="citizenship_country_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_hospital_contact_person_view_form" model="ir.ui.view">
+        <field name="name">hr.hospital.contact.person.view.form</field>
+        <field name="model">hr.hospital.contact.person</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div style="float: right; margin-left: 16px;">
+                        <field name="image_1920" widget="image" class="oe_avatar" nolabel="1" options="{'preview_image': 'image_1920'}"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="full_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="oe_clear"/>
+                    <group>
+                        <group>
+                            <field name="last_name"/>
+                            <field name="first_name"/>
+                            <field name="middle_name"/>
+                            <field name="gender"/>
+                            <field name="birth_date"/>
+                        </group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="citizenship_country_id"/>
+                            <field name="language_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="patient_ids" domain="[('allergies', '!=', False)]"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_hospital_contact_person_action" model="ir.actions.act_window">
+        <field name="name">Contact Persons</field>
+        <field name="res_model">hr.hospital.contact.person</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

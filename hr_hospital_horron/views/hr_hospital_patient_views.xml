@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Patients -->
+
     <record id="hr_hospital_patient_view_list" model="ir.ui.view">
         <field name="name">hr.hospital.patient.view.list</field>
         <field name="model">hr.hospital.patient</field>
         <field name="arch" type="xml">
             <list>
-                <field name="name"/>
-                <field name="birthdate"/>
+                <field name="full_name" string="Patient"/>
+                <field name="age"/>
                 <field name="phone"/>
-                <field name="doctor_id"/>
+                <field name="email"/>
+                <field name="personal_doctor_id" string="Personal Doctor"/>
+                <field name="language_id"/>
+                <field name="citizenship_country_id"/>
+                <!-- active field not present -->
             </list>
         </field>
     </record>
@@ -18,21 +24,53 @@
         <field name="model">hr.hospital.patient</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="%(hr_hospital_patient_card_export_wizard_action)d" type="action" string="Export Card" class="oe_highlight"/>
+                </header>
                 <sheet>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+                        <div class="oe_title" style="margin: 0; flex: 1 1 auto;">
+                            <h1>
+                                <field name="full_name" placeholder="Full name"/>
+                            </h1>
+                        </div>
+                        <div>
+                            <field name="image_1920" widget="image" class="oe_avatar" nolabel="1"/>
+                        </div>
+                    </div>
+
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="birthdate"/>
+                            <field name="last_name"/>
+                            <field name="first_name"/>
+                            <field name="middle_name"/>
+                            <field name="gender"/>
+                            <field name="birth_date"/>
+                            <field name="age" readonly="1"/>
+                            <field name="personal_doctor_id"/>
+                            <field name="contact_person_id"/>
                         </group>
                         <group>
                             <field name="phone"/>
                             <field name="email"/>
-                            <field name="doctor_id"/>
+                            <field name="citizenship_country_id"/>
+                            <field name="language_id"/>
+                            <field name="passport_number"/>
+                            <field name="blood_group"/>
+                            <field name="insurance_company_id"/>
+                            <field name="insurance_policy_number"/>
                         </group>
                     </group>
+
                     <notebook>
                         <page string="Visits">
-                            <field name="visit_ids"/>
+                            <field name="visit_ids" context="{'default_patient_id': id}"/>
+                        </page>
+                        <page string="Doctor History">
+                            <field name="doctor_history_ids" context="{'default_patient_id': id}"/>
+                        </page>
+                        <page string="Allergies">
+                            <field name="allergies" placeholder="Allergies"/>
                         </page>
                         <page string="Notes">
                             <field name="notes" nolabel="1"/>

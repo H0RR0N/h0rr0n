@@ -22,6 +22,40 @@
               action="hr_hospital_visit_action"
               sequence="30"/>
 
+    <menuitem id="hr_hospital_menu_diagnoses"
+              name="Diagnoses"
+              parent="hr_hospital_menu_root"
+              action="hr_hospital_medical_diagnosis_action"
+              sequence="40"/>
+
+    <menuitem id="hr_hospital_menu_contacts"
+              name="Contact Persons"
+              parent="hr_hospital_menu_root"
+              action="hr_hospital_contact_person_action"
+              sequence="50"/>
+
+    <menuitem id="hr_hospital_menu_reports"
+              name="Reports"
+              parent="hr_hospital_menu_root"
+              sequence="60"/>
+
+    <menuitem id="hr_hospital_menu_disease_report"
+              name="Disease Report"
+              parent="hr_hospital_menu_reports"
+              action="hr_hospital_disease_report_wizard_action"
+              sequence="10"/>
+
+    <menuitem id="hr_hospital_menu_tools"
+              name="Tools"
+              parent="hr_hospital_menu_root"
+              sequence="70"/>
+
+    <menuitem id="hr_hospital_menu_schedule_wizard"
+              name="Generate Schedule"
+              parent="hr_hospital_menu_tools"
+              action="hr_hospital_doctor_schedule_wizard_action"
+              sequence="10"/>
+
     <menuitem id="hr_hospital_menu_config"
               name="Configuration"
               parent="hr_hospital_menu_root"
@@ -32,4 +66,22 @@
               parent="hr_hospital_menu_config"
               action="hr_hospital_disease_action"
               sequence="10"/>
+
+    <menuitem id="hr_hospital_menu_specialities"
+              name="Doctor Specialities"
+              parent="hr_hospital_menu_config"
+              action="hr_hospital_doctor_speciality_action"
+              sequence="20"/>
+
+    <menuitem id="hr_hospital_menu_schedules"
+              name="Doctor Schedules"
+              parent="hr_hospital_menu_config"
+              action="hr_hospital_doctor_schedule_action"
+              sequence="30"/>
+
+    <menuitem id="hr_hospital_menu_history"
+              name="Doctor History"
+              parent="hr_hospital_menu_config"
+              action="hr_hospital_patient_doctor_history_action"
+              sequence="40"/>
 </odoo>

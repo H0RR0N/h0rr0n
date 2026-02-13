@@ -14,7 +14,7 @@
         <field name="name">Anna Kovalenko</field>
         <field name="last_name">Kovalenko</field>
         <field name="first_name">Anna</field>
-        <field name="birthdate">1985-03-15</field>
+        <field name="birth_date">1985-03-15</field>
         <field name="phone">+380671234567</field>
         <field name="email">anna.kovalenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -30,7 +30,7 @@
         <field name="name">Petro Bondarenko</field>
         <field name="last_name">Bondarenko</field>
         <field name="first_name">Petro</field>
-        <field name="birthdate">1970-07-22</field>
+        <field name="birth_date">1970-07-22</field>
         <field name="phone">+380672345678</field>
         <field name="email">petro.bondarenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -45,7 +45,7 @@
         <field name="name">Maria Shevchenko</field>
         <field name="last_name">Shevchenko</field>
         <field name="first_name">Maria</field>
-        <field name="birthdate">1992-11-08</field>
+        <field name="birth_date">1992-11-08</field>
         <field name="phone">+380673456789</field>
         <field name="email">maria.shevchenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -61,7 +61,7 @@
         <field name="name">Dmytro Hrytsenko</field>
         <field name="last_name">Hrytsenko</field>
         <field name="first_name">Dmytro</field>
-        <field name="birthdate">1988-02-11</field>
+        <field name="birth_date">1988-02-11</field>
         <field name="phone">+380674567890</field>
         <field name="email">dmytro.hrytsenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -69,6 +69,7 @@
         <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
         <field name="blood_group">ab+</field>
         <field name="passport_number">DD45678901</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_1"/>
         <field name="notes">Referred to neurology for follow-up.</field>
     </record>
 
@@ -76,7 +77,7 @@
         <field name="name">Iryna Marchenko</field>
         <field name="last_name">Marchenko</field>
         <field name="first_name">Iryna</field>
-        <field name="birthdate">1995-06-30</field>
+        <field name="birth_date">1995-06-30</field>
         <field name="phone">+380675678901</field>
         <field name="email">iryna.marchenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -92,7 +93,7 @@
         <field name="name">Oleksii Tkachenko</field>
         <field name="last_name">Tkachenko</field>
         <field name="first_name">Oleksii</field>
-        <field name="birthdate">1980-09-09</field>
+        <field name="birth_date">1980-09-09</field>
         <field name="phone">+380676789012</field>
         <field name="email">oleksii.tkachenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -107,7 +108,7 @@
         <field name="name">Kateryna Holub</field>
         <field name="last_name">Holub</field>
         <field name="first_name">Kateryna</field>
-        <field name="birthdate">1978-04-01</field>
+        <field name="birth_date">1978-04-01</field>
         <field name="phone">+380677890123</field>
         <field name="email">kateryna.holub@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -115,6 +116,7 @@
         <field name="blood_group">b-</field>
         <field name="passport_number">GG78901234</field>
         <field name="allergies">Seafood</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_2"/>
         <field name="notes">Reports seafood allergy; keep in mind for medications/supplements.</field>
     </record>
 
@@ -122,13 +124,14 @@
         <field name="name">Yaroslav Poliakov</field>
         <field name="last_name">Poliakov</field>
         <field name="first_name">Yaroslav</field>
-        <field name="birthdate">1990-12-20</field>
+        <field name="birth_date">1990-12-20</field>
         <field name="phone">+380678901234</field>
         <field name="email">yaroslav.poliakov@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
         <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
         <field name="blood_group">ab-</field>
         <field name="passport_number">HH89012345</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_3"/>
         <field name="notes">Preventive visit scheduled.</field>
     </record>
 
@@ -136,7 +139,7 @@
         <field name="name">Svitlana Karpenko</field>
         <field name="last_name">Karpenko</field>
         <field name="first_name">Svitlana</field>
-        <field name="birthdate">1983-08-17</field>
+        <field name="birth_date">1983-08-17</field>
         <field name="phone">+380679012345</field>
         <field name="email">svitlana.karpenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -144,6 +147,7 @@
         <field name="blood_group">o+</field>
         <field name="passport_number">II90123456</field>
         <field name="allergies">Dust</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_4"/>
         <field name="notes">Reports dust allergy; consider antihistamines when needed.</field>
     </record>
 
@@ -151,13 +155,14 @@
         <field name="name">Taras Kovtun</field>
         <field name="last_name">Kovtun</field>
         <field name="first_name">Taras</field>
-        <field name="birthdate">1998-10-05</field>
+        <field name="birth_date">1998-10-05</field>
         <field name="phone">+380680123456</field>
         <field name="email">taras.kovtun@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
         <field name="blood_group">a+</field>
         <field name="passport_number">JJ01234567</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_5"/>
         <field name="notes">Seen by an intern under supervision.</field>
     </record>
 
@@ -165,7 +170,7 @@
         <field name="name">Olha Romaniuk</field>
         <field name="last_name">Romaniuk</field>
         <field name="first_name">Olha</field>
-        <field name="birthdate">1986-01-14</field>
+        <field name="birth_date">1986-01-14</field>
         <field name="phone">+380681234567</field>
         <field name="email">olha.romaniuk@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -180,7 +185,7 @@
         <field name="name">Andrii Lysenko</field>
         <field name="last_name">Lysenko</field>
         <field name="first_name">Andrii</field>
-        <field name="birthdate">1975-05-25</field>
+        <field name="birth_date">1975-05-25</field>
         <field name="phone">+380682345678</field>
         <field name="email">andrii.lysenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -195,13 +200,14 @@
         <field name="name">Nadiia Savchenko</field>
         <field name="last_name">Savchenko</field>
         <field name="first_name">Nadiia</field>
-        <field name="birthdate">2000-02-02</field>
+        <field name="birth_date">2000-02-02</field>
         <field name="phone">+380683456789</field>
         <field name="email">nadiia.savchenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
         <field name="blood_group">o-</field>
         <field name="passport_number">MM34567890</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_6"/>
         <field name="notes">First-time visit with an intern.</field>
     </record>
 
@@ -209,7 +215,7 @@
         <field name="name">Roman Onyshchenko</field>
         <field name="last_name">Onyshchenko</field>
         <field name="first_name">Roman</field>
-        <field name="birthdate">1993-09-13</field>
+        <field name="birth_date">1993-09-13</field>
         <field name="phone">+380684567890</field>
         <field name="email">roman.onyshchenko@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
@@ -225,13 +231,14 @@
         <field name="name">Viktoriia Horobets</field>
         <field name="last_name">Horobets</field>
         <field name="first_name">Viktoriia</field>
-        <field name="birthdate">1989-12-01</field>
+        <field name="birth_date">1989-12-01</field>
         <field name="phone">+380685678901</field>
         <field name="email">viktoriia.horobets@demo-hospital.example</field>
         <field name="citizenship_country_id" ref="base.ua"/>
         <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
         <field name="blood_group">b-</field>
         <field name="passport_number">OO56789012</field>
+        <field name="contact_person_id" ref="hr_hospital_contact_person_7"/>
         <field name="notes">Annual preventive check.</field>
     </record>
 </odoo>

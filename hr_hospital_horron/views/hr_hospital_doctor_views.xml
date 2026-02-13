@@ -6,9 +6,11 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="specialization"/>
-                <field name="phone"/>
-                <field name="email"/>
+                <field name="speciality_id"/>
+                <field name="is_intern"/>
+                <field name="mentor_id"/>
+                <field name="license_number"/>
+                <field name="rating"/>
             </list>
         </field>
     </record>
@@ -19,17 +21,47 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div style="float: right; margin-left: 16px;">
+                        <field name="image_1920" widget="image" class="oe_avatar" nolabel="1" options="{'preview_image': 'image_1920'}"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <div class="oe_clear"/>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="specialization"/>
-                        </group>
-                        <group>
+                            <field name="last_name"/>
+                            <field name="first_name"/>
+                            <field name="middle_name"/>
+                            <field name="full_name" readonly="1"/>
+                            <field name="gender"/>
+                            <field name="birth_date"/>
                             <field name="phone"/>
                             <field name="email"/>
+                            <field name="user_id"/>
+                            <field name="speciality_id"/>
+                            <field name="specialization"/>
+                            <field name="education_country_id"/>
+                        </group>
+                        <group>
+                            <field name="is_intern"/>
+                            <field name="mentor_id" invisible="not is_intern"/>
+                            <field name="license_number"/>
+                            <field name="license_date"/>
+                            <field name="experience_years" readonly="1"/>
+                            <field name="rating"/>
+                            <field name="active"/>
                         </group>
                     </group>
                     <notebook>
+                        <page string="Schedules">
+                            <field name="schedule_ids"/>
+                        </page>
+                        <page string="Interns">
+                            <field name="intern_ids"/>
+                        </page>
                         <page string="Patients">
                             <field name="patient_ids"/>
                         </page>

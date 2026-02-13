@@ -4,17 +4,21 @@
         <field name="name">Influenza</field>
         <field name="code">FLU</field>
         <field name="description">Seasonal influenza virus infection</field>
+        <field name="is_contagious">1</field>
+        <field name="danger_level">high</field>
     </record>
 
     <record id="disease_diabetes" model="hr.hospital.disease">
         <field name="name">Diabetes</field>
         <field name="code">DIA</field>
         <field name="description">Chronic metabolic disease</field>
+        <field name="danger_level">high</field>
     </record>
 
     <record id="disease_hypertension" model="hr.hospital.disease">
         <field name="name">Hypertension</field>
         <field name="code">HYP</field>
         <field name="description">High blood pressure condition</field>
+        <field name="danger_level">medium</field>
     </record>
 </odoo>

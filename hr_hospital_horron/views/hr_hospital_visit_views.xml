@@ -6,10 +6,12 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="visit_date"/>
+                <field name="planned_datetime"/>
                 <field name="patient_id"/>
                 <field name="doctor_id"/>
-                <field name="disease_id"/>
+                <field name="state"/>
+                <field name="visit_type"/>
+                <field name="diagnosis_count"/>
             </list>
         </field>
     </record>
@@ -19,21 +21,39 @@
         <field name="model">hr.hospital.visit</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="planned,done,cancelled,no_show"/>
+                    <button name="%(hr_hospital_reschedule_visit_wizard_action)d" type="action" string="Reschedule"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="visit_date"/>
+                            <field name="name" readonly="1"/>
+                            <field name="planned_datetime"/>
+                            <field name="actual_datetime" readonly="state != 'done'"/>
+                            <field name="visit_type"/>
                         </group>
                         <group>
                             <field name="patient_id"/>
                             <field name="doctor_id"/>
-                            <field name="disease_id"/>
+                            <field name="fee"/>
+                            <field name="currency_id"/>
                         </group>
                     </group>
                     <group>
-                        <field name="notes"/>
+                        <field name="disease_id"/>
                     </group>
+                    <notebook>
+                        <page string="Diagnoses">
+                            <field name="diagnosis_ids" context="{'default_visit_id': id}"/>
+                        </page>
+                        <page string="Recommendations">
+                            <field name="recommendations" nolabel="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
