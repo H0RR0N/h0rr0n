@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_search_inherit_payment_term" model="ir.ui.view">
+        <field name="name">purchase.report.search.inherit.payment.term</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='product_id']" position="after">
+                <field name="payment_term_id"/>
+            </xpath>
+            <xpath expr="//search/group[2]" position="inside">
+                <filter
+                    string="Payment Terms"
+                    name="group_payment_term_id"
+                    context="{'group_by': 'payment_term_id'}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_report_view_tree_inherit_payment_term" model="ir.ui.view">
+        <field name="name">purchase.report.view.list.inherit.payment.term</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.purchase_report_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='partner_id']" position="after">
+                <field name="payment_term_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_pivot_inherit_payment_term" model="ir.ui.view">
+        <field name="name">purchase.report.pivot.inherit.payment.term</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_pivot"/>
+        <field name="arch" type="xml">
+            <xpath expr="//pivot" position="inside">
+                <field name="payment_term_id" type="row"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
