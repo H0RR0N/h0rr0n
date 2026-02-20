@@ -21,9 +21,37 @@ class MedicalDiagnosis(models.Model):
         required=True,
         domain=lambda self: self._domain_visit_id(),
     )
+    patient_id = fields.Many2one(
+        comodel_name="hr.hospital.patient",
+        related="visit_id.patient_id",
+        store=True,
+        readonly=True,
+    )
+    doctor_id = fields.Many2one(
+        comodel_name="hr.hospital.doctor",
+        related="visit_id.doctor_id",
+        store=True,
+        readonly=True,
+    )
+    diagnosis_datetime = fields.Datetime(
+        related="visit_id.planned_datetime",
+        store=True,
+        readonly=True,
+    )
+    diagnosis_date = fields.Date(
+        compute="_compute_diagnosis_date",
+        store=True,
+        readonly=True,
+    )
     disease_id = fields.Many2one(
         comodel_name="hr.hospital.disease",
         domain=[("is_contagious", "=", True), ("danger_level", "in", ["high", "critical"])],
+    )
+    disease_type_id = fields.Many2one(
+        comodel_name="hr.hospital.disease",
+        related="disease_id.parent_id",
+        store=True,
+        readonly=True,
     )
     description = fields.Text()
     treatment_html = fields.Html(string="Treatment")
@@ -63,6 +91,11 @@ class MedicalDiagnosis(models.Model):
     def _compute_name(self):
         for rec in self:
             rec.name = rec._build_display_name()
+
+    @api.depends("diagnosis_datetime")
+    def _compute_diagnosis_date(self):
+        for rec in self:
+            rec.diagnosis_date = fields.Date.to_date(rec.diagnosis_datetime) if rec.diagnosis_datetime else False
 
     @api.depends("name", "disease_id", "disease_id.name", "visit_id", "visit_id.name")
     def _compute_display_name(self):

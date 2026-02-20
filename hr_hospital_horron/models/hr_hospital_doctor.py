@@ -123,3 +123,18 @@ class HospitalDoctor(models.Model):
         if active_visits:
             raise ValidationError(_("Cannot archive doctors with active visits."))
         return super().action_archive()
+
+    def action_create_visit(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("New Visit"),
+            "res_model": "hr.hospital.visit",
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                **self.env.context,
+                "default_doctor_id": self.id,
+                "default_visit_type": "first",
+            },
+        }

@@ -58,6 +58,12 @@ class HospitalPatient(models.Model):
         comodel_name="hr.hospital.visit",
         inverse_name="patient_id",
     )
+    diagnosis_ids = fields.One2many(
+        comodel_name="hr.hospital.medical.diagnosis",
+        inverse_name="patient_id",
+    )
+    visit_count = fields.Integer(compute="_compute_visit_count")
+    diagnosis_count = fields.Integer(compute="_compute_diagnosis_count")
     notes = fields.Text()
 
     @api.depends("last_name", "first_name", "middle_name")
@@ -77,6 +83,16 @@ class HospitalPatient(models.Model):
 
     def name_get(self):
         return [(rec.id, rec.full_name or rec.name) for rec in self]
+
+    @api.depends("visit_ids")
+    def _compute_visit_count(self):
+        for rec in self:
+            rec.visit_count = len(rec.visit_ids)
+
+    @api.depends("diagnosis_ids")
+    def _compute_diagnosis_count(self):
+        for rec in self:
+            rec.diagnosis_count = len(rec.diagnosis_ids)
 
     @api.constrains("birth_date")
     def _check_birth_date(self):
@@ -151,3 +167,43 @@ class HospitalPatient(models.Model):
                             reason=self.env.context.get("history_reason"),
                         )
         return result
+
+    def action_open_visit_history(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "hr_hospital_horron.hr_hospital_visit_action"
+        )
+        action["domain"] = [("patient_id", "=", self.id)]
+        action["context"] = {
+            **self.env.context,
+            "default_patient_id": self.id,
+        }
+        return action
+
+    def action_open_diagnosis_history(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "hr_hospital_horron.hr_hospital_medical_diagnosis_action"
+        )
+        action["domain"] = [("patient_id", "=", self.id)]
+        action["context"] = {
+            **self.env.context,
+            "search_default_group_by_disease": 1,
+        }
+        return action
+
+    def action_create_visit(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("New Visit"),
+            "res_model": "hr.hospital.visit",
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                **self.env.context,
+                "default_patient_id": self.id,
+                "default_doctor_id": self.personal_doctor_id.id,
+                "default_visit_type": "repeat" if self.visit_ids else "first",
+            },
+        }

@@ -16,28 +16,29 @@ class DiseaseReportWizard(models.TransientModel):
         comodel_name="hr.hospital.disease",
         string="Diseases",
     )
-    country_ids = fields.Many2many(
-        comodel_name="res.country",
-        string="Countries",
-    )
-    date_start = fields.Date(required=True)
-    date_end = fields.Date(required=True)
-    report_type = fields.Selection(
-        selection=[("detailed", "Detailed"), ("summary", "Summary")],
-        default="detailed",
+    date_start = fields.Date(
         required=True,
+        default=lambda self: fields.Date.start_of(
+            fields.Date.context_today(self), "month"
+        ),
     )
-    group_by = fields.Selection(
-        selection=[
-            ("doctor", "Doctor"),
-            ("disease", "Disease"),
-            ("month", "Month"),
-            ("country", "Country"),
-        ],
-        default="doctor",
+    date_end = fields.Date(
         required=True,
+        default=lambda self: fields.Date.end_of(
+            fields.Date.context_today(self), "month"
+        ),
     )
-    summary_result = fields.Text(readonly=True)
+
+    @api.model
+    def default_get(self, fields_list):
+        vals = super().default_get(fields_list)
+        active_model = self.env.context.get("active_model")
+        active_ids = self.env.context.get("active_ids") or []
+        if not active_ids and self.env.context.get("active_id"):
+            active_ids = [self.env.context["active_id"]]
+        if active_model == "hr.hospital.doctor" and active_ids and "doctor_ids" in fields_list:
+            vals["doctor_ids"] = [(6, 0, active_ids)]
+        return vals
 
     @api.constrains("date_start", "date_end")
     def _check_dates(self):
@@ -45,19 +46,8 @@ class DiseaseReportWizard(models.TransientModel):
             if rec.date_start and rec.date_end and rec.date_end < rec.date_start:
                 raise ValidationError(_("End date must be after start date."))
 
-    @api.onchange("country_ids")
-    def _onchange_country_ids(self):
-        if self.country_ids:
-            return {
-                "domain": {
-                    "doctor_ids": [
-                        ("education_country_id", "in", self.country_ids.ids)
-                    ]
-                }
-            }
-        return {}
-
     def _get_domain(self):
+        self.ensure_one()
         start_dt = datetime.combine(self.date_start, time.min)
         end_dt = datetime.combine(self.date_end, time.max)
         domain = [
@@ -68,59 +58,19 @@ class DiseaseReportWizard(models.TransientModel):
             domain.append(("visit_id.doctor_id", "in", self.doctor_ids.ids))
         if self.disease_ids:
             domain.append(("disease_id", "in", self.disease_ids.ids))
-        if self.country_ids:
-            domain.append(
-                (
-                    "visit_id.patient_id.citizenship_country_id",
-                    "in",
-                    self.country_ids.ids,
-                )
-            )
         return domain
-
-    def get_report_data(self):
-        self.ensure_one()
-        diagnosis_model = self.env["hr.hospital.medical.diagnosis"]
-        if self.report_type == "detailed":
-            return diagnosis_model.search(self._get_domain())
-
-        groupby_map = {
-            "doctor": "visit_id.doctor_id",
-            "disease": "disease_id",
-            "month": "visit_id.planned_datetime:month",
-            "country": "visit_id.patient_id.citizenship_country_id",
-        }
-        groupby = groupby_map.get(self.group_by)
-        data = diagnosis_model.read_group(
-            self._get_domain(), ["id"], [groupby], lazy=False
-        )
-        summary = []
-        for entry in data:
-            label = entry.get(groupby)
-            if isinstance(label, (list, tuple)):
-                label = label[1]
-            summary.append({"group": label or _("Undefined"), "count": entry["__count"]})
-        return summary
 
     def action_generate(self):
         self.ensure_one()
-        if self.report_type == "detailed":
-            diagnoses = self.get_report_data()
-            return {
-                "type": "ir.actions.act_window",
-                "name": _("Diagnoses"),
-                "res_model": "hr.hospital.medical.diagnosis",
-                "view_mode": "list,form",
-                "domain": [("id", "in", diagnoses.ids)],
-            }
-
-        summary = self.get_report_data()
-        lines = [f"{item['group']}: {item['count']}" for item in summary]
-        self.summary_result = "\n".join(lines)
+        diagnoses = self.env["hr.hospital.medical.diagnosis"].search(self._get_domain())
         return {
             "type": "ir.actions.act_window",
-            "res_model": "hr.hospital.disease.report.wizard",
-            "res_id": self.id,
-            "view_mode": "form",
-            "target": "new",
+            "name": _("Diagnoses"),
+            "res_model": "hr.hospital.medical.diagnosis",
+            "view_mode": "list,form,pivot,graph",
+            "domain": [("id", "in", diagnoses.ids)],
+            "context": {
+                **self.env.context,
+                "search_default_group_by_disease": 1,
+            },
         }

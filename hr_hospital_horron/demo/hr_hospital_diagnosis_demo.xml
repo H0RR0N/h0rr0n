@@ -66,7 +66,6 @@
         <field name="approved_date">2026-01-21 16:00:00</field>
     </record>
 
-    <!-- Intern diagnoses (left unapproved) -->
     <record id="hr_hospital_diag_07" model="hr.hospital.medical.diagnosis">
         <field name="visit_id" ref="hr_hospital_visit_13"/>
         <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
@@ -141,7 +140,6 @@
         <field name="approved">0</field>
     </record>
 
-    <!-- Extra diagnoses to reach the required volume -->
     <record id="hr_hospital_diag_15" model="hr.hospital.medical.diagnosis">
         <field name="visit_id" ref="hr_hospital_visit_01"/>
         <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
@@ -200,5 +198,163 @@
         <field name="approved">1</field>
         <field name="approved_by_doctor_id" ref="hr_hospital_doctor_petrenko"/>
         <field name="approved_date">2026-01-26 10:20:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_21" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_26"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Upper respiratory infection, moderate fever.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="approved_date">2026-02-10 09:40:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_22" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_27"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Confirmed viral infection with persistent cough.</field>
+        <field name="severity">severe</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="approved_date">2026-02-10 11:10:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_23" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_30"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Seasonal infection symptoms, no complications.</field>
+        <field name="severity">light</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="approved_date">2026-02-11 10:15:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_24" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_31"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Respiratory symptoms with fatigue.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="approved_date">2026-02-11 11:45:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_25" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_34"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Mild infection after prolonged stress period.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="approved_date">2026-02-12 12:40:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_26" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_35"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Follow-up diagnosis, symptoms improving.</field>
+        <field name="severity">light</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="approved_date">2026-02-12 16:00:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_27" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_38"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Positive rapid test, moderate condition.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="approved_date">2026-02-16 09:45:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_28" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_39"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Preliminary intern diagnosis, waiting mentor approval.</field>
+        <field name="severity">medium</field>
+        <field name="approved">0</field>
+    </record>
+
+    <record id="hr_hospital_diag_29" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_42"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Recurrent cough, infection confirmed.</field>
+        <field name="severity">severe</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="approved_date">2026-02-17 12:00:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_30" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_43"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Localized infection, outpatient treatment started.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="approved_date">2026-02-18 09:40:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_31" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_45"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Emergency case, high fever and dyspnea.</field>
+        <field name="severity">critical</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_kravets"/>
+        <field name="approved_date">2026-02-18 16:20:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_32" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_48"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Mild infection symptoms with stable vitals.</field>
+        <field name="severity">light</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="approved_date">2026-02-19 14:45:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_33" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_50"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Repeat consultation, symptoms partially resolved.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="approved_date">2026-02-20 11:35:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_34" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_52"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Intern diagnosis reviewed and approved by mentor.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="approved_date">2026-02-23 12:10:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_35" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_53"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_infection"/>
+        <field name="description">Repeat diagnosis with stable improvement.</field>
+        <field name="severity">light</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="approved_date">2026-02-24 14:15:00</field>
+    </record>
+
+    <record id="hr_hospital_diag_36" model="hr.hospital.medical.diagnosis">
+        <field name="visit_id" ref="hr_hospital_visit_55"/>
+        <field name="disease_id" ref="hr_hospital_demo_disease_covid"/>
+        <field name="description">Confirmed diagnosis in early stage, home monitoring.</field>
+        <field name="severity">medium</field>
+        <field name="approved">1</field>
+        <field name="approved_by_doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="approved_date">2026-03-04 09:50:00</field>
     </record>
 </odoo>

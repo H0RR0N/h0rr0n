@@ -25,9 +25,18 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_create_visit" type="object" string="New Visit"/>
                     <button name="%(hr_hospital_patient_card_export_wizard_action)d" type="action" string="Export Card" class="oe_highlight"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_visit_history" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="visit_count" widget="statinfo" string="Visits"/>
+                        </button>
+                        <button name="action_open_diagnosis_history" type="object" class="oe_stat_button" icon="fa-stethoscope">
+                            <field name="diagnosis_count" widget="statinfo" string="Diagnoses"/>
+                        </button>
+                    </div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
                         <div class="oe_title" style="margin: 0; flex: 1 1 auto;">
                             <h1>
@@ -64,7 +73,18 @@
 
                     <notebook>
                         <page string="Visits">
-                            <field name="visit_ids" context="{'default_patient_id': id}"/>
+                            <field name="visit_ids" context="{'default_patient_id': id, 'default_doctor_id': personal_doctor_id}"/>
+                        </page>
+                        <page string="Diagnosis History">
+                            <field name="diagnosis_ids" readonly="1">
+                                <list>
+                                    <field name="diagnosis_datetime" string="Date"/>
+                                    <field name="disease_id"/>
+                                    <field name="doctor_id"/>
+                                    <field name="severity"/>
+                                    <field name="approved"/>
+                                </list>
+                            </field>
                         </page>
                         <page string="Doctor History">
                             <field name="doctor_history_ids" context="{'default_patient_id': id}"/>
@@ -81,9 +101,27 @@
         </field>
     </record>
 
+    <record id="hr_hospital_patient_view_search" model="ir.ui.view">
+        <field name="name">hr.hospital.patient.view.search</field>
+        <field name="model">hr.hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="full_name" string="Patient Name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <filter name="with_doctor" string="With Personal Doctor" domain="[('personal_doctor_id', '!=', False)]"/>
+                <group name="group_by">
+                    <filter name="group_by_doctor" string="Doctor" context="{'group_by': 'personal_doctor_id'}"/>
+                    <filter name="group_by_gender" string="Gender" context="{'group_by': 'gender'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="hr_hospital_patient_action" model="ir.actions.act_window">
         <field name="name">Patients</field>
         <field name="res_model">hr.hospital.patient</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_hospital_patient_view_search"/>
     </record>
 </odoo>

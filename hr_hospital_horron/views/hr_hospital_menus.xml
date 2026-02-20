@@ -45,6 +45,12 @@
               action="hr_hospital_disease_report_wizard_action"
               sequence="10"/>
 
+    <menuitem id="hr_hospital_menu_visit_monthly_pivot"
+              name="Visits by Doctor/Status (Month)"
+              parent="hr_hospital_menu_reports"
+              action="hr_hospital_visit_monthly_pivot_action"
+              sequence="20"/>
+
     <menuitem id="hr_hospital_menu_tools"
               name="Tools"
               parent="hr_hospital_menu_root"

@@ -13,14 +13,6 @@
                     <group>
                         <field name="doctor_ids" widget="many2many_tags"/>
                         <field name="disease_ids" widget="many2many_tags"/>
-                        <field name="country_ids" widget="many2many_tags"/>
-                    </group>
-                    <group>
-                        <field name="report_type"/>
-                        <field name="group_by" invisible="report_type == 'detailed'"/>
-                    </group>
-                    <group>
-                        <field name="summary_result" nolabel="1" invisible="report_type != 'summary'"/>
                     </group>
                 </sheet>
                 <footer>
@@ -36,5 +28,8 @@
         <field name="res_model">hr.hospital.disease.report.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
+        <field name="binding_model_id" ref="model_hr_hospital_doctor"/>
+        <field name="binding_type">report</field>
+        <field name="binding_view_types">list,form</field>
     </record>
 </odoo>

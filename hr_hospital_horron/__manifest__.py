@@ -1,11 +1,7 @@
 {
     "name": "HR Hospital",
-    "version": "19.0.3.0.0",
+    "version": "19.0.4.0.0",
     "summary": "Hospital workflow: patients, doctors, visits, diagnoses, and schedules.",
-    "description": (
-        "Compact training module for Odoo 19 hospital workflow with patients, doctors, "
-        "diseases, visits, diagnoses, schedules, utility wizards, and demo data."
-    ),
     "category": "Customization",
     "author": "H0RR0N",
     "license": "LGPL-3",
