@@ -14,7 +14,7 @@ class HospitalPatient(models.Model):
         precompute=True,
         default=lambda self: _("Unnamed Patient"),
     )
-    # birth_date is inherited from hr.hospital.abstract.person
+
     doctor_id = fields.Many2one(
         comodel_name="hr.hospital.doctor",
         string="Observing Doctor",

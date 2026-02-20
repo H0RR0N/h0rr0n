@@ -7,7 +7,6 @@
       - Done visits are mostly within the last ~30 days (useful for the diagnosis domain).
     -->
 
-    <!-- Done visits (used by diagnosis demo) -->
     <record id="hr_hospital_visit_01" model="hr.hospital.visit">
         <field name="name">V-0001</field>
         <field name="visit_date">2026-01-14 09:00:00</field>
@@ -255,7 +254,6 @@
         <field name="visit_type">repeat</field>
     </record>
 
-    <!-- Extended dataset: additional visits for richer pivot/graph demos -->
     <record id="hr_hospital_visit_26" model="hr.hospital.visit">
         <field name="name">V-0026</field>
         <field name="visit_date">2026-02-10 09:00:00</field>
