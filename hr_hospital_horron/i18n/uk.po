@@ -162,6 +162,7 @@ msgstr "Скасувати"
 
 #. module: hr_hospital_horron
 #: model:ir.model.fields.selection,name:hr_hospital_horron.selection__hr_hospital_visit__state__cancelled
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Cancelled"
 msgstr "Скасовано"
 
@@ -490,6 +491,7 @@ msgstr "Лікарі"
 
 #. module: hr_hospital_horron
 #: model:ir.model.fields.selection,name:hr_hospital_horron.selection__hr_hospital_visit__state__done
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Done"
 msgstr "Виконано"
 
@@ -608,6 +610,7 @@ msgstr "П'ятниця"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_contact_person__full_name
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_doctor__full_name
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient__full_name
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Full Name"
 msgstr "Повне ім'я"
 
@@ -621,6 +624,7 @@ msgstr "Повне ім'я"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_contact_person__gender
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_doctor__gender
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient__gender
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Gender"
 msgstr "Стать"
 
@@ -976,6 +980,7 @@ msgstr "Номер паспорта"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient_doctor_history__patient_id
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_visit__patient_id
 #: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_patient_view_list
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Patient"
 msgstr "Пацієнт"
 
@@ -1014,6 +1019,7 @@ msgstr "Пацієнта не можна записувати до того са
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_mass_reassign_doctor_wizard__patient_ids
 #: model:ir.ui.menu,name:hr_hospital_horron.hr_hospital_menu_patients
 #: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_form
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Patients"
 msgstr "Пацієнти"
 
@@ -1028,6 +1034,7 @@ msgstr "Особистий лікар"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_contact_person__phone
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_doctor__phone
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient__phone
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Phone"
 msgstr "Телефон"
 
@@ -1039,6 +1046,7 @@ msgstr "Невірний формат номера телефону."
 
 #. module: hr_hospital_horron
 #: model:ir.model.fields.selection,name:hr_hospital_horron.selection__hr_hospital_visit__state__planned
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Planned"
 msgstr "Заплановано"
 
@@ -1889,3 +1897,83 @@ msgstr "Користувацький фільтр..."
 #: code:addons/web/static/src/search/custom_group_by_item/custom_group_by_item.xml:0
 msgid "Custom Group"
 msgstr "Користувацьке групування"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Open"
+msgstr "Відкрити"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Edit"
+msgstr "Редагувати"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Delete"
+msgstr "Видалити"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Archive"
+msgstr "Архівувати"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Unarchive"
+msgstr "Розархівувати"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_doctor_view_kanban
+msgid "Interns:"
+msgstr "Інтерни:"
+
+#. module: hr_hospital_horron
+#: model:ir.actions.report,name:hr_hospital_horron.hr_hospital_doctor_report_action
+msgid "Doctor Report"
+msgstr "Звіт лікаря"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Visit History"
+msgstr "Історія візитів"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Date"
+msgstr "Дата"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Type"
+msgstr "Тип"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Status"
+msgstr "Статус"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "No visits found."
+msgstr "Візитів не знайдено."
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Date of Birth"
+msgstr "Дата народження"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Visit Status"
+msgstr "Статус візиту"
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "No patients found."
+msgstr "Пацієнтів не знайдено."
+
+#. module: hr_hospital_horron
+#: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
+msgid "Printed:"
+msgstr "Надруковано:"

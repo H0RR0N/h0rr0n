@@ -49,18 +49,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <t t-set="visit_type_labels" t-value="{
-                                                'first': 'First',
-                                                'repeat': 'Repeat',
-                                                'preventive': 'Preventive',
-                                                'emergency': 'Emergency'
-                                            }"/>
-                                            <t t-set="visit_state_labels" t-value="{
-                                                'planned': 'Planned',
-                                                'done': 'Done',
-                                                'cancelled': 'Cancelled',
-                                                'no_show': 'No Show'
-                                            }"/>
+                                            <t t-set="visit_type_labels" t-value="dict(env['hr.hospital.visit']._fields['visit_type']._description_selection(env))"/>
+                                            <t t-set="visit_state_labels" t-value="dict(env['hr.hospital.visit']._fields['state']._description_selection(env))"/>
                                             <t t-foreach="visits" t-as="visit">
                                                 <tr>
                                                     <td>
@@ -101,11 +91,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <t t-set="gender_labels" t-value="{
-                                                'male': 'Male',
-                                                'female': 'Female',
-                                                'other': 'Other'
-                                            }"/>
+                                            <t t-set="gender_labels" t-value="dict(env['hr.hospital.patient']._fields['gender']._description_selection(env))"/>
+                                            <t t-set="visit_state_labels" t-value="dict(env['hr.hospital.visit']._fields['state']._description_selection(env))"/>
                                             <t t-foreach="o.patient_ids" t-as="patient">
                                                 <t t-set="last_visit" t-value="env['hr.hospital.visit'].search(
                                                     [('patient_id', '=', patient.id), ('doctor_id', '=', o.id)],
@@ -129,17 +116,17 @@
                                                         <t t-if="last_visit">
                                                             <t t-if="last_visit.state == 'planned'">
                                                                 <span style="display:block; background-color:#FFD700; padding:3px 6px; border-radius:3px; text-align:center;">
-                                                                    Planned
+                                                                    <t t-esc="visit_state_labels.get(last_visit.state, '')"/>
                                                                 </span>
                                                             </t>
                                                             <t t-elif="last_visit.state == 'done'">
                                                                 <span style="display:block; background-color:#28A745; color:#fff; padding:3px 6px; border-radius:3px; text-align:center;">
-                                                                    Done
+                                                                    <t t-esc="visit_state_labels.get(last_visit.state, '')"/>
                                                                 </span>
                                                             </t>
                                                             <t t-elif="last_visit.state == 'cancelled'">
                                                                 <span style="display:block; background-color:#DC3545; color:#fff; padding:3px 6px; border-radius:3px; text-align:center;">
-                                                                    Cancelled
+                                                                    <t t-esc="visit_state_labels.get(last_visit.state, '')"/>
                                                                 </span>
                                                             </t>
                                                         </t>
