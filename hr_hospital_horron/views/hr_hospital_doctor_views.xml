@@ -48,7 +48,6 @@
                             <field name="language_id"/>
                             <field name="user_id"/>
                             <field name="speciality_id"/>
-                            <field name="specialization"/>
                             <field name="education_country_id"/>
                         </group>
                         <group>
@@ -101,9 +100,6 @@
                         <page string="Schedules">
                             <field name="schedule_ids"/>
                         </page>
-                        <page string="Patients">
-                            <field name="patient_ids"/>
-                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -115,32 +111,53 @@
         <field name="model">hr.hospital.doctor</field>
         <field name="arch" type="xml">
             <kanban default_group_by="speciality_id">
+                <field name="last_name"/>
+                <field name="first_name"/>
                 <field name="full_name"/>
                 <field name="speciality_id"/>
-                <field name="license_number"/>
                 <field name="is_intern"/>
-                <field name="mentor_id"/>
+                <field name="intern_names"/>
+                <field name="active"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_global_click o_kanban_record">
+                        <div name="o_kanban_manage_dropdown">
+                            <a role="menuitem" type="open">Open</a>
+                            <a role="menuitem" type="edit">Edit</a>
+                            <a t-if="widget.deletable" role="menuitem" type="delete">Delete</a>
+                            <a t-if="record.active.raw_value"
+                               name="action_archive"
+                               type="object"
+                               role="menuitem">Archive</a>
+                            <a t-if="!record.active.raw_value"
+                               name="action_unarchive"
+                               type="object"
+                               role="menuitem">Unarchive</a>
+                        </div>
+                        <div class="oe_kanban_global_click">
                             <div class="o_kanban_record_title">
-                                <field name="full_name"/>
+                                <strong>
+                                    <field name="last_name"/>
+                                    <t t-if="record.first_name.raw_value">
+                                        <span> </span><field name="first_name"/>
+                                    </t>
+                                </strong>
                             </div>
-                            <div>
+                            <div t-if="record.speciality_id.raw_value">
                                 <field name="speciality_id"/>
                             </div>
-                            <div>
-                                <strong>License:</strong>
-                                <field name="license_number"/>
+                            <div t-if="record.intern_names.raw_value">
+                                <small class="text-muted">Interns:</small>
+                                <div>
+                                    <t t-esc="record.intern_names.raw_value"/>
+                                </div>
                             </div>
-                            <div t-if="record.is_intern.raw_value">
-                                <strong>Mentor:</strong>
-                                <field name="mentor_id"/>
-                            </div>
-                            <footer class="mt8">
-                                <button name="action_create_visit" type="object" string="New Visit" class="btn btn-primary btn-sm"/>
-                            </footer>
                         </div>
+                        <footer>
+                            <button name="action_create_visit"
+                                    type="object"
+                                    string="New Visit"
+                                    class="btn btn-primary btn-sm"/>
+                        </footer>
                     </t>
                 </templates>
             </kanban>

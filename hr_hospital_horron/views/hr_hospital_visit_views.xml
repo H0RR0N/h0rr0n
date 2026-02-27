@@ -11,7 +11,6 @@
                 <field name="doctor_id"/>
                 <field name="state"/>
                 <field name="visit_type"/>
-                <field name="diagnosis_count"/>
             </list>
         </field>
     </record>
@@ -40,18 +39,12 @@
                             <field name="currency_id"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="disease_id"/>
-                    </group>
                     <notebook>
                         <page string="Diagnoses">
                             <field name="diagnosis_ids" context="{'default_visit_id': id}"/>
                         </page>
                         <page string="Recommendations">
                             <field name="recommendations" nolabel="1"/>
-                        </page>
-                        <page string="Notes">
-                            <field name="notes" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>

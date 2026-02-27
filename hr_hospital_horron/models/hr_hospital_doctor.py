@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+
+import pytz
 
 from dateutil.relativedelta import relativedelta
 
@@ -13,7 +15,6 @@ class HospitalDoctor(models.Model):
     _inherit = ["hr.hospital.abstract.person"]
 
     name = fields.Char(required=True)
-    specialization = fields.Char(translate=True)
     user_id = fields.Many2one(
         comodel_name="res.users",
         ondelete="set null",
@@ -32,6 +33,10 @@ class HospitalDoctor(models.Model):
     intern_ids = fields.One2many(
         comodel_name="hr.hospital.doctor",
         inverse_name="mentor_id",
+        string="Interns",
+    )
+    intern_names = fields.Char(
+        compute="_compute_intern_names",
         string="Interns",
     )
     license_number = fields.Char(required=True, copy=False)
@@ -62,12 +67,25 @@ class HospitalDoctor(models.Model):
         "Rating must be between 0 and 5.",
     )
 
+    def get_print_datetime(self):
+        tz_name = self._context.get("tz") or self.env.user.tz or "UTC"
+        tz = pytz.timezone(tz_name)
+        now_local = datetime.now(pytz.utc).astimezone(tz)
+        return now_local.strftime("%d.%m.%Y %H:%M")
+
     @api.depends("last_name", "first_name", "middle_name", "name")
     def _compute_full_name(self):
         for rec in self:
             parts = [rec.last_name, rec.first_name, rec.middle_name]
             parts = [p for p in parts if p]
             rec.full_name = " ".join(parts) if parts else (rec.name or "")
+
+    @api.depends("intern_ids", "intern_ids.full_name", "intern_ids.name")
+    def _compute_intern_names(self):
+        for rec in self:
+            names = [intern.full_name or intern.name for intern in rec.intern_ids]
+            names = [name for name in names if name]
+            rec.intern_names = ", ".join(names)
 
     @api.depends("license_date")
     def _compute_experience_years(self):
@@ -91,12 +109,9 @@ class HospitalDoctor(models.Model):
     def name_get(self):
         result = []
         for rec in self:
-            speciality = rec.speciality_id.name or rec.specialization or ""
+            speciality = rec.speciality_id.name or ""
             base_name = rec.full_name or rec.name
-            if speciality:
-                display = f"{base_name} ({speciality})"
-            else:
-                display = base_name
+            display = f"{base_name} ({speciality})" if speciality else base_name
             result.append((rec.id, display))
         return result
 
@@ -104,8 +119,7 @@ class HospitalDoctor(models.Model):
     def _onchange_is_intern(self):
         if not self.is_intern:
             self.mentor_id = False
-            return
-        if self.is_intern and not self.mentor_id:
+        elif not self.mentor_id:
             domain = [("is_intern", "=", False)]
             if self.speciality_id:
                 domain.append(("speciality_id", "=", self.speciality_id.id))

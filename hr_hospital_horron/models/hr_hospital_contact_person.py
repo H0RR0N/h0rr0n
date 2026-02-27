@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
 
+from ..utils import fill_name_parts_from_name
+
 
 class ContactPerson(models.Model):
     _name = "hr.hospital.contact.person"
@@ -41,19 +43,7 @@ class ContactPerson(models.Model):
     def create(self, vals_list):
         normalized_vals_list = []
         for vals in vals_list:
-            vals = dict(vals)
-            raw_name = (vals.get("name") or "").strip()
-            has_name_parts = any(
-                vals.get(field_name)
-                for field_name in ("last_name", "first_name", "middle_name")
-            )
-            if raw_name and not has_name_parts:
-                parts = [part for part in raw_name.split(" ") if part]
-                if parts:
-                    vals["last_name"] = parts[0]
-                    if len(parts) > 1:
-                        vals["first_name"] = " ".join(parts[1:])
-            normalized_vals_list.append(vals)
+            normalized_vals_list.append(fill_name_parts_from_name(vals))
         return super().create(normalized_vals_list)
 
     @api.onchange("language_id", "citizenship_country_id")

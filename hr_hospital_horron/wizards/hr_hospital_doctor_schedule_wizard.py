@@ -3,6 +3,8 @@ from datetime import timedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+from ..utils import normalize_time_value, validate_time_value
+
 
 class DoctorScheduleWizard(models.TransientModel):
     _name = "hr.hospital.doctor.schedule.wizard"
@@ -45,43 +47,22 @@ class DoctorScheduleWizard(models.TransientModel):
         help="Use HH:MM in the range 00:00-23:59.",
     )
 
-    @staticmethod
-    def _normalize_time_value(value):
-        if value in (False, None):
-            return value
-        max_minutes = 23 * 60 + 59
-        minutes = int(round(value * 60))
-        minutes = max(0, min(max_minutes, minutes))
-        return minutes / 60.0
-
-    @staticmethod
-    def _validate_time_value(value, field_label):
-        max_time = 23 + (59 / 60)
-        if value < 0 or value > max_time:
-            raise ValidationError(
-                _("%(field)s must be between 00:00 and 23:59.", field=field_label)
-            )
-        if abs(value * 60 - round(value * 60)) > 1e-6:
-            raise ValidationError(
-                _("%(field)s must use minute precision (HH:MM).", field=field_label)
-            )
-
     @api.onchange("time_start", "time_end", "break_from", "break_to")
     def _onchange_time_values(self):
         for rec in self:
-            rec.time_start = rec._normalize_time_value(rec.time_start)
-            rec.time_end = rec._normalize_time_value(rec.time_end)
-            rec.break_from = rec._normalize_time_value(rec.break_from)
-            rec.break_to = rec._normalize_time_value(rec.break_to)
+            rec.time_start = normalize_time_value(rec.time_start)
+            rec.time_end = normalize_time_value(rec.time_end)
+            rec.break_from = normalize_time_value(rec.break_from)
+            rec.break_to = normalize_time_value(rec.break_to)
 
     def _validate_time_fields(self):
         for rec in self:
-            rec._validate_time_value(rec.time_start, _("Start time"))
-            rec._validate_time_value(rec.time_end, _("End time"))
+            validate_time_value(rec.time_start, _("Start time"))
+            validate_time_value(rec.time_end, _("End time"))
             if rec.break_from not in (False, None):
-                rec._validate_time_value(rec.break_from, _("Break from"))
+                validate_time_value(rec.break_from, _("Break from"))
             if rec.break_to not in (False, None):
-                rec._validate_time_value(rec.break_to, _("Break to"))
+                validate_time_value(rec.break_to, _("Break to"))
 
             if rec.time_end <= rec.time_start:
                 raise ValidationError(_("End time must be after start time."))
@@ -129,10 +110,10 @@ class DoctorScheduleWizard(models.TransientModel):
 
     def action_generate(self):
         self.ensure_one()
-        self.time_start = self._normalize_time_value(self.time_start)
-        self.time_end = self._normalize_time_value(self.time_end)
-        self.break_from = self._normalize_time_value(self.break_from)
-        self.break_to = self._normalize_time_value(self.break_to)
+        self.time_start = normalize_time_value(self.time_start)
+        self.time_end = normalize_time_value(self.time_end)
+        self.break_from = normalize_time_value(self.break_from)
+        self.break_to = normalize_time_value(self.break_to)
         self._validate_time_fields()
         self._validate_selected_days()
 

@@ -1,10 +1,10 @@
-from . import hr_hospital_abstract_person as hr_hospital_abstract_person
-from . import hr_hospital_contact_person as hr_hospital_contact_person
-from . import hr_hospital_doctor_speciality as hr_hospital_doctor_speciality
-from . import hr_hospital_doctor_schedule as hr_hospital_doctor_schedule
-from . import hr_hospital_patient_doctor_history as hr_hospital_patient_doctor_history
-from . import hr_hospital_medical_diagnosis as hr_hospital_medical_diagnosis
-from . import hr_hospital_disease as hr_hospital_disease
-from . import hr_hospital_doctor as hr_hospital_doctor
-from . import hr_hospital_patient as hr_hospital_patient
-from . import hr_hospital_visit as hr_hospital_visit
+from . import hr_hospital_abstract_person
+from . import hr_hospital_contact_person
+from . import hr_hospital_doctor
+from . import hr_hospital_doctor_schedule
+from . import hr_hospital_doctor_speciality
+from . import hr_hospital_disease
+from . import hr_hospital_medical_diagnosis
+from . import hr_hospital_patient
+from . import hr_hospital_patient_doctor_history
+from . import hr_hospital_visit

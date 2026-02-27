@@ -1,6 +1,8 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+from ..utils import fill_name_parts_from_name
+
 
 class HospitalPatient(models.Model):
     _name = "hr.hospital.patient"
@@ -63,8 +65,6 @@ class HospitalPatient(models.Model):
         inverse_name="patient_id",
     )
     visit_count = fields.Integer(compute="_compute_visit_count")
-    diagnosis_count = fields.Integer(compute="_compute_diagnosis_count")
-    notes = fields.Text()
 
     @api.depends("last_name", "first_name", "middle_name")
     def _compute_name(self):
@@ -74,13 +74,6 @@ class HospitalPatient(models.Model):
             fallback_name = rec._origin.name if rec._origin and rec._origin.id else False
             rec.name = " ".join(parts) if parts else (fallback_name or _("Unnamed Patient"))
 
-    @api.depends("last_name", "first_name", "middle_name", "name")
-    def _compute_full_name(self):
-        for rec in self:
-            parts = [rec.last_name, rec.first_name, rec.middle_name]
-            parts = [p for p in parts if p]
-            rec.full_name = " ".join(parts) if parts else (rec.name or "")
-
     def name_get(self):
         return [(rec.id, rec.full_name or rec.name) for rec in self]
 
@@ -88,11 +81,6 @@ class HospitalPatient(models.Model):
     def _compute_visit_count(self):
         for rec in self:
             rec.visit_count = len(rec.visit_ids)
-
-    @api.depends("diagnosis_ids")
-    def _compute_diagnosis_count(self):
-        for rec in self:
-            rec.diagnosis_count = len(rec.diagnosis_ids)
 
     @api.constrains("birth_date")
     def _check_birth_date(self):
@@ -113,32 +101,15 @@ class HospitalPatient(models.Model):
             vals["change_reason"] = reason
         self.env["hr.hospital.patient.doctor.history"].create(vals)
 
-    def _skip_doctor_history_tracking(self):
-        return bool(
-            self.env.context.get("skip_doctor_history")
-            or self.env.context.get("install_mode")
-        )
-
     @api.model_create_multi
     def create(self, vals_list):
-        normalized_vals_list = []
+        result = []
         for vals in vals_list:
-            vals = dict(vals)
-            raw_name = (vals.get("name") or "").strip()
-            has_name_parts = any(
-                vals.get(field_name)
-                for field_name in ("last_name", "first_name", "middle_name")
-            )
-            if raw_name and not has_name_parts:
-                parts = [part for part in raw_name.split(" ") if part]
-                if parts:
-                    vals["last_name"] = parts[0]
-                    if len(parts) > 1:
-                        vals["first_name"] = " ".join(parts[1:])
-            normalized_vals_list.append(vals)
+            result.append(fill_name_parts_from_name(vals))
 
-        records = super().create(normalized_vals_list)
-        if records._skip_doctor_history_tracking():
+        records = super().create(result)
+        skip = self.env.context.get("skip_doctor_history") or self.env.context.get("install_mode")
+        if skip:
             return records
         for rec in records:
             if rec.personal_doctor_id:
@@ -146,7 +117,7 @@ class HospitalPatient(models.Model):
         return records
 
     def write(self, vals):
-        if self._skip_doctor_history_tracking():
+        if self.env.context.get("skip_doctor_history") or self.env.context.get("install_mode"):
             return super().write(vals)
 
         tracked = {}
@@ -175,20 +146,8 @@ class HospitalPatient(models.Model):
         )
         action["domain"] = [("patient_id", "=", self.id)]
         action["context"] = {
-            **self.env.context,
+            **{k: v for k, v in self.env.context.items() if k != "group_by"},
             "default_patient_id": self.id,
-        }
-        return action
-
-    def action_open_diagnosis_history(self):
-        self.ensure_one()
-        action = self.env["ir.actions.actions"]._for_xml_id(
-            "hr_hospital_horron.hr_hospital_medical_diagnosis_action"
-        )
-        action["domain"] = [("patient_id", "=", self.id)]
-        action["context"] = {
-            **self.env.context,
-            "search_default_group_by_disease": 1,
         }
         return action
 

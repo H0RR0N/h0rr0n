@@ -56,10 +56,8 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="icd10_code"/>
-                <filter name="contagious" string="Contagious" domain="[('is_contagious', '=', True)]"/>
                 <group name="group_by">
                     <filter name="group_by_parent" string="Parent Disease" context="{'group_by': 'parent_id'}"/>
-                    <filter name="group_by_danger" string="Danger Level" context="{'group_by': 'danger_level'}"/>
                 </group>
                 <searchpanel>
                     <field name="parent_id" string="Disease Hierarchy" hierarchize="1" select="multi" enable_counters="1"/>

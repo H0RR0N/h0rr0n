@@ -1,6 +1,6 @@
 {
     "name": "HR Hospital",
-    "version": "19.0.4.0.0",
+    "version": "19.0.5.0.0",
     "summary": "Hospital workflow: patients, doctors, visits, diagnoses, and schedules.",
     "category": "Customization",
     "author": "H0RR0N",
@@ -8,12 +8,12 @@
     "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
-        "data/hr_hospital_sequence_data.xml",
         "wizards/hr_hospital_mass_reassign_doctor_wizard_views.xml",
         "wizards/hr_hospital_disease_report_wizard_views.xml",
         "wizards/hr_hospital_reschedule_visit_wizard_views.xml",
         "wizards/hr_hospital_doctor_schedule_wizard_views.xml",
         "wizards/hr_hospital_patient_card_export_wizard_views.xml",
+        "reports/hr_hospital_doctor_report.xml",
         "views/hr_hospital_patient_views.xml",
         "views/hr_hospital_doctor_views.xml",
         "views/hr_hospital_visit_views.xml",

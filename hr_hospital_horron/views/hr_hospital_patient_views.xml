@@ -30,9 +30,6 @@
                         <button name="action_open_visit_history" type="object" class="oe_stat_button" icon="fa-calendar">
                             <field name="visit_count" widget="statinfo" string="Visits"/>
                         </button>
-                        <button name="action_open_diagnosis_history" type="object" class="oe_stat_button" icon="fa-stethoscope">
-                            <field name="diagnosis_count" widget="statinfo" string="Diagnoses"/>
-                        </button>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
                         <div class="oe_title" style="margin: 0; flex: 1 1 auto;">
@@ -88,9 +85,6 @@
                         </page>
                         <page string="Allergies">
                             <field name="allergies" placeholder="Allergies"/>
-                        </page>
-                        <page string="Notes">
-                            <field name="notes" nolabel="1"/>
                         </page>
                     </notebook>
                 </sheet>

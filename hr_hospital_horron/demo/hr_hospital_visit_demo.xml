@@ -44,7 +44,6 @@
         <field name="patient_id" ref="hr_hospital_patient_04"/>
         <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Follow-up with pediatrics (legacy appointment).</field>
     </record>
 
     <record id="hr_hospital_visit_05" model="hr.hospital.visit">
@@ -54,7 +53,6 @@
         <field name="patient_id" ref="hr_hospital_patient_05"/>
         <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
         <field name="visit_type">emergency</field>
-        <field name="notes">Cancelled by patient (work conflict).</field>
     </record>
 
     <record id="hr_hospital_visit_06" model="hr.hospital.visit">
@@ -74,7 +72,6 @@
         <field name="patient_id" ref="hr_hospital_patient_07"/>
         <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Patient did not arrive and did not call.</field>
     </record>
 
     <record id="hr_hospital_visit_08" model="hr.hospital.visit">
@@ -122,7 +119,6 @@
         <field name="patient_id" ref="hr_hospital_patient_12"/>
         <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
         <field name="visit_type">preventive</field>
-        <field name="notes">Cancelled by clinic (doctor unavailable).</field>
     </record>
 
     <record id="hr_hospital_visit_13" model="hr.hospital.visit">
@@ -133,7 +129,6 @@
         <field name="patient_id" ref="hr_hospital_patient_13"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
         <field name="visit_type">first</field>
-        <field name="notes">Seen by an intern; diagnosis requires approval.</field>
     </record>
 
     <record id="hr_hospital_visit_14" model="hr.hospital.visit">
@@ -144,7 +139,6 @@
         <field name="patient_id" ref="hr_hospital_patient_14"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Seen by an intern; diagnosis requires approval.</field>
     </record>
 
     <record id="hr_hospital_visit_15" model="hr.hospital.visit">
@@ -173,7 +167,6 @@
         <field name="patient_id" ref="hr_hospital_patient_02"/>
         <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">No-show (patient unreachable by phone).</field>
     </record>
 
     <record id="hr_hospital_visit_18" model="hr.hospital.visit">
@@ -222,7 +215,6 @@
         <field name="patient_id" ref="hr_hospital_patient_07"/>
         <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Cancelled (patient requested a new date).</field>
     </record>
 
     <record id="hr_hospital_visit_23" model="hr.hospital.visit">
@@ -290,7 +282,6 @@
         <field name="patient_id" ref="hr_hospital_patient_14"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
         <field name="visit_type">first</field>
-        <field name="notes">Cancelled due to required pre-visit tests.</field>
     </record>
 
     <record id="hr_hospital_visit_30" model="hr.hospital.visit">
@@ -320,7 +311,6 @@
         <field name="patient_id" ref="hr_hospital_patient_02"/>
         <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Patient missed appointment without notification.</field>
     </record>
 
     <record id="hr_hospital_visit_33" model="hr.hospital.visit">
@@ -359,7 +349,6 @@
         <field name="patient_id" ref="hr_hospital_patient_06"/>
         <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
         <field name="visit_type">repeat</field>
-        <field name="notes">Cancelled by clinic due to urgent operating room case.</field>
     </record>
 
     <record id="hr_hospital_visit_37" model="hr.hospital.visit">
@@ -389,7 +378,6 @@
         <field name="patient_id" ref="hr_hospital_patient_09"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_koval"/>
         <field name="visit_type">first</field>
-        <field name="notes">Intern visit, follow-up approval workflow expected.</field>
     </record>
 
     <record id="hr_hospital_visit_40" model="hr.hospital.visit">
@@ -484,7 +472,6 @@
         <field name="patient_id" ref="hr_hospital_patient_04"/>
         <field name="doctor_id" ref="hr_hospital_doctor_kravets"/>
         <field name="visit_type">first</field>
-        <field name="notes">Cancelled due to patient travel plans.</field>
     </record>
 
     <record id="hr_hospital_visit_50" model="hr.hospital.visit">
@@ -514,7 +501,6 @@
         <field name="patient_id" ref="hr_hospital_patient_07"/>
         <field name="doctor_id" ref="hr_hospital_doctor_intern_savchuk"/>
         <field name="visit_type">first</field>
-        <field name="notes">Intern consultation reviewed by mentor afterwards.</field>
     </record>
 
     <record id="hr_hospital_visit_53" model="hr.hospital.visit">

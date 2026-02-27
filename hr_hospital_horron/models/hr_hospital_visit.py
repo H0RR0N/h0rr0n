@@ -15,7 +15,6 @@ class HospitalVisit(models.Model):
     visit_date = fields.Datetime(
         required=True,
         default=fields.Datetime.now,
-        help="Technical/planned datetime storage. Use Planned Date in UI.",
     )
     planned_datetime = fields.Datetime(
         related="visit_date",
@@ -53,10 +52,6 @@ class HospitalVisit(models.Model):
             ("emergency", "Emergency"),
         ],
     )
-    disease_id = fields.Many2one(
-        comodel_name="hr.hospital.disease",
-        ondelete="set null",
-    )
     diagnosis_ids = fields.One2many(
         comodel_name="hr.hospital.medical.diagnosis",
         inverse_name="visit_id",
@@ -67,64 +62,16 @@ class HospitalVisit(models.Model):
         comodel_name="res.currency",
         default=lambda self: self.env.company.currency_id.id,
     )
-    diagnosis_count = fields.Integer(
-        compute="_compute_diagnosis_count", store=True
-    )
-    notes = fields.Text()
-
-    @staticmethod
-    def _doctor_ref_part(doctor):
-        last_name = (doctor.last_name or "").strip()
-        first_name = (doctor.first_name or "").strip()
-        initials = f"{last_name[:1]}{first_name[:1]}".upper()
-        if initials:
-            return initials
-
-        fallback_parts = (doctor.full_name or doctor.name or "").split()
-        if fallback_parts:
-            return "".join(part[:1].upper() for part in fallback_parts[:2])
-        return "DR"
-
-    @staticmethod
-    def _normalize_reference_number(raw_number):
-        raw_number = (raw_number or "").strip()
-        if raw_number.isdigit():
-            return raw_number.zfill(6)
-        digits = "".join(char for char in raw_number if char.isdigit())
-        return (digits[-6:] if digits else "000000").zfill(6)
-
-    def _next_reference_number(self):
-        return self.env["ir.sequence"].next_by_code("hr.hospital.visit") or "000000"
-
-    def _build_reference(self, doctor):
-        number = self._normalize_reference_number(self._next_reference_number())
-        return f"{self._doctor_ref_part(doctor)}{number}"
-
-    @staticmethod
-    def _is_default_reference(name):
-        raw = (name or "").strip()
-        return not raw or raw == "/" or raw.lower() == "new"
 
     @api.model_create_multi
     def create(self, vals_list):
-        # UI typically edits planned_datetime (related to visit_date). In some flows
-        # Odoo may pass only planned_datetime, so make sure visit_date is set.
         normalized = []
         for vals in vals_list:
             vals = dict(vals)
             if not vals.get("visit_date") and vals.get("planned_datetime"):
                 vals["visit_date"] = vals["planned_datetime"]
             normalized.append(vals)
-        records = super().create(normalized)
-        for rec in records:
-            if rec.doctor_id and self._is_default_reference(rec.name):
-                super(HospitalVisit, rec).write({"name": rec._build_reference(rec.doctor_id)})
-        return records
-
-    @api.depends("diagnosis_ids")
-    def _compute_diagnosis_count(self):
-        for rec in self:
-            rec.diagnosis_count = len(rec.diagnosis_ids)
+        return super().create(normalized)
 
     def _localize_datetime(self, dt):
         """Return dt in user's timezone (naive local dt)."""
@@ -352,32 +299,56 @@ class HospitalVisit(models.Model):
                     _("Actual visit datetime cannot be earlier than planned datetime.")
                 )
 
-    def write(self, vals):
-        vals = dict(vals)
-        protected_fields = {"doctor_id", "planned_datetime", "visit_date", "actual_datetime"}
+    @api.constrains("doctor_id", "planned_datetime", "visit_date", "actual_datetime", "state")
+    def _check_past_visit_protected_field_changes(self):
+        old_values = self.env.context.get("visit_old_values") or {}
+        if not old_values:
+            return
+
         now = fields.Datetime.now()
         for rec in self:
-            # 1) Completed visit is immutable by requirement.
-            if rec.state == "done" and protected_fields.intersection(vals):
+            previous = old_values.get(rec.id)
+            if not previous:
+                continue
+
+            doctor_changed = rec.doctor_id.id != previous["doctor_id"]
+            planned_changed = rec.planned_datetime != previous["planned_datetime"]
+            visit_date_changed = rec.visit_date != previous["visit_date"]
+            actual_datetime_changed = rec.actual_datetime != previous["actual_datetime"]
+
+            if previous["state"] == "done" and (
+                doctor_changed
+                or planned_changed
+                or visit_date_changed
+                or actual_datetime_changed
+            ):
                 raise ValidationError(
                     _("Cannot change doctor or date/time for completed visits.")
                 )
 
-            # 2) Visit that already occurred (planned_datetime in the past) must also be protected.
-            # This closes the loophole when state wasn't switched to 'done'.
-            planned_dt = rec.planned_datetime or rec.visit_date
-            if planned_dt and planned_dt < now and rec.state not in ("cancelled",):
-                if {"doctor_id", "planned_datetime", "visit_date"}.intersection(vals):
+            previous_planned_dt = previous["planned_datetime"] or previous["visit_date"]
+            if previous_planned_dt and previous_planned_dt < now and previous["state"] != "cancelled":
+                if doctor_changed or planned_changed or visit_date_changed:
                     raise ValidationError(
                         _("Cannot change doctor or planned date/time for visits that already occurred.")
                     )
 
-        result = super().write(vals)
-        if "name" not in vals:
-            for rec in self:
-                if rec.doctor_id and self._is_default_reference(rec.name):
-                    super(HospitalVisit, rec).write({"name": rec._build_reference(rec.doctor_id)})
-        return result
+    def write(self, vals):
+        vals = dict(vals)
+        tracked_fields = {"doctor_id", "planned_datetime", "visit_date", "actual_datetime"}
+        if not tracked_fields.intersection(vals):
+            return super().write(vals)
+
+        old_values = {}
+        for rec in self:
+            old_values[rec.id] = {
+                "state": rec.state,
+                "doctor_id": rec.doctor_id.id,
+                "planned_datetime": rec.planned_datetime,
+                "visit_date": rec.visit_date,
+                "actual_datetime": rec.actual_datetime,
+            }
+        return super(HospitalVisit, self.with_context(visit_old_values=old_values)).write(vals)
 
     def unlink(self):
         for rec in self:

@@ -113,20 +113,25 @@ class MedicalDiagnosis(models.Model):
             ("planned_datetime", ">=", dt_from),
         ]
 
+    def _get_current_user_doctor(self):
+        doctor = self.env["hr.hospital.doctor"].search(
+            [("user_id", "=", self.env.user.id)], limit=1
+        )
+        if not doctor:
+            raise ValidationError(_("Current user is not linked to a doctor."))
+        return doctor
+
+    def _approval_values_for_current_user(self):
+        doctor = self._get_current_user_doctor()
+        return {
+            "approved_by_doctor_id": doctor.id,
+            "approved_date": fields.Datetime.now(),
+        }
+
     def write(self, vals):
         if vals.get("approved") and not vals.get("approved_by_doctor_id"):
-            doctor = self.env["hr.hospital.doctor"].search(
-                [("user_id", "=", self.env.user.id)], limit=1
-            )
-            if not doctor:
-                raise ValidationError(_("Current user is not linked to a doctor."))
             vals = dict(vals)
-            vals.update(
-                {
-                    "approved_by_doctor_id": doctor.id,
-                    "approved_date": fields.Datetime.now(),
-                }
-            )
+            vals.update(self._approval_values_for_current_user())
         return super().write(vals)
 
     @api.model_create_multi
@@ -135,17 +140,7 @@ class MedicalDiagnosis(models.Model):
         for vals in vals_list:
             vals = dict(vals)
             if vals.get("approved") and not vals.get("approved_by_doctor_id"):
-                doctor = self.env["hr.hospital.doctor"].search(
-                    [("user_id", "=", self.env.user.id)], limit=1
-                )
-                if not doctor:
-                    raise ValidationError(_("Current user is not linked to a doctor."))
-                vals.update(
-                    {
-                        "approved_by_doctor_id": doctor.id,
-                        "approved_date": fields.Datetime.now(),
-                    }
-                )
+                vals.update(self._approval_values_for_current_user())
             normalized.append(vals)
         return super().create(normalized)
 
@@ -173,15 +168,9 @@ class MedicalDiagnosis(models.Model):
         for rec in self:
             if rec.approved:
                 continue
-            doctor = self.env["hr.hospital.doctor"].search(
-                [("user_id", "=", self.env.user.id)], limit=1
-            )
-            if not doctor:
-                raise ValidationError(_("Current user is not linked to a doctor."))
             rec.write(
                 {
                     "approved": True,
-                    "approved_by_doctor_id": doctor.id,
-                    "approved_date": fields.Datetime.now(),
+                    **rec._approval_values_for_current_user(),
                 }
             )
