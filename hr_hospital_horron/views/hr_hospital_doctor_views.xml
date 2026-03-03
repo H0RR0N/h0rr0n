@@ -110,7 +110,7 @@
         <field name="name">hr.hospital.doctor.view.kanban</field>
         <field name="model">hr.hospital.doctor</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="speciality_id">
+            <kanban>
                 <field name="last_name"/>
                 <field name="first_name"/>
                 <field name="full_name"/>
@@ -119,40 +119,39 @@
                 <field name="intern_names"/>
                 <field name="active"/>
                 <templates>
+                    <t t-name="menu">
+                        <a t-if="widget.editable" role="menuitem" type="open" class="dropdown-item">Open</a>
+                        <a t-if="widget.editable" role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                        <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                        <div role="separator" class="dropdown-divider"/>
+                        <a t-if="record.active.raw_value"
+                           name="action_archive"
+                           type="object"
+                           role="menuitem"
+                           class="dropdown-item">Archive</a>
+                        <a t-if="!record.active.raw_value"
+                           name="action_unarchive"
+                           type="object"
+                           role="menuitem"
+                           class="dropdown-item">Unarchive</a>
+                    </t>
                     <t t-name="card">
-                        <div name="o_kanban_manage_dropdown">
-                            <a role="menuitem" type="open">Open</a>
-                            <a role="menuitem" type="edit">Edit</a>
-                            <a t-if="widget.deletable" role="menuitem" type="delete">Delete</a>
-                            <a t-if="record.active.raw_value"
-                               name="action_archive"
-                               type="object"
-                               role="menuitem">Archive</a>
-                            <a t-if="!record.active.raw_value"
-                               name="action_unarchive"
-                               type="object"
-                               role="menuitem">Unarchive</a>
-                        </div>
-                        <div class="oe_kanban_global_click">
-                            <div class="o_kanban_record_title">
-                                <strong>
-                                    <field name="last_name"/>
-                                    <t t-if="record.first_name.raw_value">
-                                        <span> </span><field name="first_name"/>
-                                    </t>
-                                </strong>
-                            </div>
-                            <div t-if="record.speciality_id.raw_value">
+                        <main>
+                            <field class="fw-bold fs-5" name="last_name"/>
+                            <t t-if="record.first_name.raw_value">
+                                <span class="fw-bold fs-5"> <field name="first_name"/></span>
+                            </t>
+                            <div t-if="record.speciality_id.raw_value" class="text-muted">
                                 <field name="speciality_id"/>
                             </div>
                             <div t-if="record.intern_names.raw_value">
                                 <small class="text-muted">Interns:</small>
                                 <div>
-                                    <t t-esc="record.intern_names.raw_value"/>
+                                    <t t-out="record.intern_names.raw_value"/>
                                 </div>
                             </div>
-                        </div>
-                        <footer>
+                        </main>
+                        <footer class="pt-1">
                             <button name="action_create_visit"
                                     type="object"
                                     string="New Visit"
@@ -187,6 +186,5 @@
         <field name="res_model">hr.hospital.doctor</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="hr_hospital_doctor_view_search"/>
-        <field name="context">{'group_by': 'speciality_id'}</field>
     </record>
 </odoo>

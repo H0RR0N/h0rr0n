@@ -4,7 +4,7 @@ import io
 import json
 from datetime import datetime, time
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -44,7 +44,7 @@ class PatientCardExportWizard(models.TransientModel):
     def _check_dates(self):
         for rec in self:
             if rec.date_start and rec.date_end and rec.date_end < rec.date_start:
-                raise ValidationError(_("End date must be after start date."))
+                raise ValidationError(self.env._("End date must be after start date."))
 
     def _get_visits_domain(self):
         domain = [("patient_id", "=", self.patient_id.id)]

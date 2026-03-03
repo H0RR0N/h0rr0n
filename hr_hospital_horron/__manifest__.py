@@ -14,6 +14,7 @@
         "wizards/hr_hospital_doctor_schedule_wizard_views.xml",
         "wizards/hr_hospital_patient_card_export_wizard_views.xml",
         "reports/hr_hospital_doctor_report.xml",
+        "reports/hr_hospital_doctor_report_templates.xml",
         "views/hr_hospital_patient_views.xml",
         "views/hr_hospital_doctor_views.xml",
         "views/hr_hospital_visit_views.xml",

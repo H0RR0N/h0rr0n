@@ -3,7 +3,7 @@ import re
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import email_normalize
 
@@ -58,13 +58,13 @@ class AbstractPerson(models.AbstractModel):
         phone_pattern = re.compile(r"^\+?[\d\-\s\(\)]+$")
         for rec in self:
             if rec.phone and not phone_pattern.match(rec.phone):
-                raise ValidationError(_("Phone number format is invalid."))
+                raise ValidationError(self.env._("Phone number format is invalid."))
 
     @api.constrains("email")
     def _check_email_format(self):
         for rec in self:
             if rec.email and not email_normalize(rec.email):
-                raise ValidationError(_("Email format is invalid."))
+                raise ValidationError(self.env._("Email format is invalid."))
 
     @api.onchange("citizenship_country_id")
     def _onchange_citizenship_country(self):

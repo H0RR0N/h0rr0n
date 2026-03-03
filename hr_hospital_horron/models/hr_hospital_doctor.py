@@ -1,10 +1,8 @@
-from datetime import date, datetime
-
-import pytz
+from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -68,9 +66,8 @@ class HospitalDoctor(models.Model):
     )
 
     def get_print_datetime(self):
-        tz_name = self._context.get("tz") or self.env.user.tz or "UTC"
-        tz = pytz.timezone(tz_name)
-        now_local = datetime.now(pytz.utc).astimezone(tz)
+        now_utc = fields.Datetime.to_datetime(fields.Datetime.now())
+        now_local = fields.Datetime.context_timestamp(self, now_utc)
         return now_local.strftime("%d.%m.%Y %H:%M")
 
     @api.depends("last_name", "first_name", "middle_name", "name")
@@ -100,11 +97,11 @@ class HospitalDoctor(models.Model):
     def _check_mentor(self):
         for rec in self:
             if rec.mentor_id and not rec.is_intern:
-                raise ValidationError(_("Only interns can have a mentor assigned."))
+                raise ValidationError(self.env._("Only interns can have a mentor assigned."))
             if rec.mentor_id and rec.mentor_id.is_intern:
-                raise ValidationError(_("Mentor cannot be an intern."))
+                raise ValidationError(self.env._("Mentor cannot be an intern."))
             if rec.mentor_id and rec.mentor_id == rec:
-                raise ValidationError(_("Doctor cannot be their own mentor."))
+                raise ValidationError(self.env._("Doctor cannot be their own mentor."))
 
     def name_get(self):
         result = []
@@ -135,14 +132,14 @@ class HospitalDoctor(models.Model):
             ]
         )
         if active_visits:
-            raise ValidationError(_("Cannot archive doctors with active visits."))
+            raise ValidationError(self.env._("Cannot archive doctors with active visits."))
         return super().action_archive()
 
     def action_create_visit(self):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": _("New Visit"),
+            "name": self.env._("New Visit"),
             "res_model": "hr.hospital.visit",
             "view_mode": "form",
             "target": "current",

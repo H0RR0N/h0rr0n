@@ -1,6 +1,6 @@
 from datetime import datetime, time
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -44,7 +44,7 @@ class DiseaseReportWizard(models.TransientModel):
     def _check_dates(self):
         for rec in self:
             if rec.date_start and rec.date_end and rec.date_end < rec.date_start:
-                raise ValidationError(_("End date must be after start date."))
+                raise ValidationError(self.env._("End date must be after start date."))
 
     def _get_domain(self):
         self.ensure_one()
@@ -65,7 +65,7 @@ class DiseaseReportWizard(models.TransientModel):
         diagnoses = self.env["hr.hospital.medical.diagnosis"].search(self._get_domain())
         return {
             "type": "ir.actions.act_window",
-            "name": _("Diagnoses"),
+            "name": self.env._("Diagnoses"),
             "res_model": "hr.hospital.medical.diagnosis",
             "view_mode": "list,form,pivot,graph",
             "domain": [("id", "in", diagnoses.ids)],

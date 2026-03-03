@@ -2,7 +2,7 @@ from datetime import datetime, time, timedelta
 
 import pytz
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -192,7 +192,7 @@ class HospitalVisit(models.Model):
         if self.patient_id and self.patient_id.allergies:
             return {
                 "warning": {
-                    "title": _("Allergies"),
+                    "title": self.env._("Allergies"),
                     "message": self.patient_id.allergies,
                 },
                 "domain": {"doctor_id": self._get_available_doctor_domain()},
@@ -224,8 +224,8 @@ class HospitalVisit(models.Model):
         if block or weekday in ("5", "6"):
             return {
                 "warning": {
-                    "title": _("Unavailable Date"),
-                    "message": _("Selected date/time is not available for this doctor."),
+                    "title": self.env._("Unavailable Date"),
+                    "message": self.env._("Selected date/time is not available for this doctor."),
                 }
             }
         return {"domain": {"planned_datetime": self._get_available_dates_domain()}}
@@ -250,7 +250,7 @@ class HospitalVisit(models.Model):
             )
             if duplicate:
                 raise ValidationError(
-                    _("Patient cannot be scheduled with the same doctor more than once per day.")
+                    self.env._("Patient cannot be scheduled with the same doctor more than once per day.")
                 )
 
     @api.constrains("planned_datetime", "doctor_id")
@@ -261,7 +261,7 @@ class HospitalVisit(models.Model):
             local_dt = rec._localize_datetime(rec.planned_datetime)
             weekday = local_dt.weekday()
             if weekday >= 5:
-                raise ValidationError(_("Visits cannot be scheduled on weekends."))
+                raise ValidationError(self.env._("Visits cannot be scheduled on weekends."))
 
             time_float = local_dt.hour + local_dt.minute / 60.0
             target_date = local_dt.date()
@@ -280,7 +280,7 @@ class HospitalVisit(models.Model):
             )
             if blocked:
                 raise ValidationError(
-                    _("Selected date/time is not available for this doctor.")
+                    self.env._("Selected date/time is not available for this doctor.")
                 )
 
     @api.constrains("state", "planned_datetime", "actual_datetime")
@@ -288,7 +288,7 @@ class HospitalVisit(models.Model):
         for rec in self:
             if rec.actual_datetime and rec.state != "done":
                 raise ValidationError(
-                    _("Actual visit datetime can be set only for completed visits.")
+                    self.env._("Actual visit datetime can be set only for completed visits.")
                 )
             if (
                 rec.actual_datetime
@@ -296,7 +296,7 @@ class HospitalVisit(models.Model):
                 and rec.actual_datetime < rec.planned_datetime
             ):
                 raise ValidationError(
-                    _("Actual visit datetime cannot be earlier than planned datetime.")
+                    self.env._("Actual visit datetime cannot be earlier than planned datetime.")
                 )
 
     @api.constrains("doctor_id", "planned_datetime", "visit_date", "actual_datetime", "state")
@@ -323,14 +323,14 @@ class HospitalVisit(models.Model):
                 or actual_datetime_changed
             ):
                 raise ValidationError(
-                    _("Cannot change doctor or date/time for completed visits.")
+                    self.env._("Cannot change doctor or date/time for completed visits.")
                 )
 
             previous_planned_dt = previous["planned_datetime"] or previous["visit_date"]
             if previous_planned_dt and previous_planned_dt < now and previous["state"] != "cancelled":
                 if doctor_changed or planned_changed or visit_date_changed:
                     raise ValidationError(
-                        _("Cannot change doctor or planned date/time for visits that already occurred.")
+                        self.env._("Cannot change doctor or planned date/time for visits that already occurred.")
                     )
 
     def write(self, vals):
@@ -354,6 +354,6 @@ class HospitalVisit(models.Model):
         for rec in self:
             if rec.diagnosis_ids:
                 raise ValidationError(
-                    _("Cannot delete visits that have diagnoses attached.")
+                    self.env._("Cannot delete visits that have diagnoses attached.")
                 )
         return super().unlink()

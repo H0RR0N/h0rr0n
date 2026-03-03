@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 from ..utils import fill_name_parts_from_name
 
@@ -12,7 +12,7 @@ class ContactPerson(models.Model):
         compute="_compute_name",
         store=True,
         precompute=True,
-        default=lambda self: _("Unnamed Contact Person"),
+        default=lambda self: self.env._("Unnamed Contact Person"),
     )
     patient_ids = fields.One2many(
         comodel_name="hr.hospital.patient",
@@ -26,7 +26,7 @@ class ContactPerson(models.Model):
             parts = [rec.last_name, rec.first_name, rec.middle_name]
             parts = [part for part in parts if part]
             fallback_name = rec._origin.name if rec._origin and rec._origin.id else False
-            rec.name = " ".join(parts) if parts else (fallback_name or _("Unnamed Contact Person"))
+            rec.name = " ".join(parts) if parts else (fallback_name or self.env._("Unnamed Contact Person"))
 
     def name_get(self):
         result = []
@@ -34,7 +34,7 @@ class ContactPerson(models.Model):
             parts = [rec.last_name, rec.first_name, rec.middle_name]
             parts = [part for part in parts if part]
             display_name = " ".join(parts) if parts else (
-                rec.full_name or rec.name or _("Unnamed Contact Person")
+                rec.full_name or rec.name or self.env._("Unnamed Contact Person")
             )
             result.append((rec.id, display_name))
         return result

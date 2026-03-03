@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -53,7 +53,7 @@ class MassReassignDoctorWizard(models.TransientModel):
     def _check_doctors(self):
         for rec in self:
             if rec.old_doctor_id and rec.old_doctor_id == rec.new_doctor_id:
-                raise ValidationError(_("Old doctor and new doctor must be different."))
+                raise ValidationError(self.env._("Old doctor and new doctor must be different."))
 
     def action_reassign(self):
         self.ensure_one()
@@ -64,7 +64,7 @@ class MassReassignDoctorWizard(models.TransientModel):
             )
         if not patients:
             raise ValidationError(
-                _("Please select at least one patient assigned to the old doctor.")
+                self.env._("Please select at least one patient assigned to the old doctor.")
             )
         ctx = dict(self.env.context)
         ctx.update(

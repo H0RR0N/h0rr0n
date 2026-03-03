@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..utils import normalize_time_value, validate_time_value
@@ -57,18 +57,18 @@ class DoctorScheduleWizard(models.TransientModel):
 
     def _validate_time_fields(self):
         for rec in self:
-            validate_time_value(rec.time_start, _("Start time"))
-            validate_time_value(rec.time_end, _("End time"))
+            validate_time_value(self.env, rec.time_start, self.env._("Start time"))
+            validate_time_value(self.env, rec.time_end, self.env._("End time"))
             if rec.break_from not in (False, None):
-                validate_time_value(rec.break_from, _("Break from"))
+                validate_time_value(self.env, rec.break_from, self.env._("Break from"))
             if rec.break_to not in (False, None):
-                validate_time_value(rec.break_to, _("Break to"))
+                validate_time_value(self.env, rec.break_to, self.env._("Break to"))
 
             if rec.time_end <= rec.time_start:
-                raise ValidationError(_("End time must be after start time."))
+                raise ValidationError(self.env._("End time must be after start time."))
             if rec.break_from and rec.break_to:
                 if not rec.time_start < rec.break_from < rec.break_to < rec.time_end:
-                    raise ValidationError(_("Break time must be within working hours."))
+                    raise ValidationError(self.env._("Break time must be within working hours."))
 
     @api.constrains("time_start", "time_end", "break_from", "break_to")
     def _check_time_fields(self):
@@ -88,13 +88,13 @@ class DoctorScheduleWizard(models.TransientModel):
     def _validate_selected_days(self):
         for rec in self:
             if not any(enabled for _, enabled in rec._get_selected_days()):
-                raise ValidationError(_("Select at least one weekday."))
+                raise ValidationError(self.env._("Select at least one weekday."))
 
     @api.constrains("weeks")
     def _check_weeks(self):
         for rec in self:
             if rec.weeks < 1:
-                raise ValidationError(_("Weeks must be greater than zero."))
+                raise ValidationError(self.env._("Weeks must be greater than zero."))
 
     @api.constrains(
         "day_mon",

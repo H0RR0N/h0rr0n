@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -12,7 +12,7 @@ class PatientDoctorHistory(models.Model):
         compute="_compute_name",
         store=True,
         precompute=True,
-        default=lambda self: _("New Doctor Assignment"),
+        default=lambda self: self.env._("New Doctor Assignment"),
     )
 
     patient_id = fields.Many2one(
@@ -35,12 +35,12 @@ class PatientDoctorHistory(models.Model):
         patient_name = self.patient_id.display_name
         doctor_name = self.doctor_id.display_name
         if patient_name and doctor_name:
-            return _("%(patient)s -> %(doctor)s", patient=patient_name, doctor=doctor_name)
+            return self.env._("%(patient)s -> %(doctor)s", patient=patient_name, doctor=doctor_name)
         if patient_name:
-            return _("Assignment for %(patient)s", patient=patient_name)
+            return self.env._("Assignment for %(patient)s", patient=patient_name)
         if doctor_name:
-            return _("Doctor %(doctor)s", doctor=doctor_name)
-        return _("New Doctor Assignment")
+            return self.env._("Doctor %(doctor)s", doctor=doctor_name)
+        return self.env._("New Doctor Assignment")
 
     @api.depends(
         "patient_id",
@@ -75,7 +75,7 @@ class PatientDoctorHistory(models.Model):
         for rec in self:
             if rec.assign_date and rec.change_date and rec.change_date < rec.assign_date:
                 raise ValidationError(
-                    _("Change date cannot be earlier than assignment date.")
+                    self.env._("Change date cannot be earlier than assignment date.")
                 )
 
     @api.model_create_multi

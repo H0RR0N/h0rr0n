@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..utils import fill_name_parts_from_name
@@ -14,7 +14,7 @@ class HospitalPatient(models.Model):
         compute="_compute_name",
         store=True,
         precompute=True,
-        default=lambda self: _("Unnamed Patient"),
+        default=lambda self: self.env._("Unnamed Patient"),
     )
 
     doctor_id = fields.Many2one(
@@ -72,7 +72,7 @@ class HospitalPatient(models.Model):
             parts = [rec.last_name, rec.first_name, rec.middle_name]
             parts = [part for part in parts if part]
             fallback_name = rec._origin.name if rec._origin and rec._origin.id else False
-            rec.name = " ".join(parts) if parts else (fallback_name or _("Unnamed Patient"))
+            rec.name = " ".join(parts) if parts else (fallback_name or self.env._("Unnamed Patient"))
 
     def name_get(self):
         return [(rec.id, rec.full_name or rec.name) for rec in self]
@@ -86,7 +86,7 @@ class HospitalPatient(models.Model):
     def _check_birth_date(self):
         for rec in self:
             if not rec.birth_date or rec.birth_date >= fields.Date.today():
-                raise ValidationError(_("Patient age must be greater than 0."))
+                raise ValidationError(self.env._("Patient age must be greater than 0."))
 
     def _create_doctor_history(self, doctor_id, assign_date=None, reason=None):
         if not doctor_id:
@@ -155,7 +155,7 @@ class HospitalPatient(models.Model):
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": _("New Visit"),
+            "name": self.env._("New Visit"),
             "res_model": "hr.hospital.visit",
             "view_mode": "form",
             "target": "current",

@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..utils import normalize_time_value, validate_time_value
@@ -14,7 +14,7 @@ class DoctorSchedule(models.Model):
         compute="_compute_display_name",
         store=True,
         precompute=True,
-        default=lambda self: _("New Schedule"),
+        default=lambda self: self.env._("New Schedule"),
     )
 
     doctor_id = fields.Many2one(
@@ -91,7 +91,7 @@ class DoctorSchedule(models.Model):
                 day_label = fields.Date.to_string(rec.date)
             else:
                 weekday_label = rec._selection_label("weekday", rec.weekday)
-                day_label = weekday_label or _("No date")
+                day_label = weekday_label or self.env._("No date")
 
             start_time = rec._float_to_hhmm(rec.time_start)
             end_time = rec._float_to_hhmm(rec.time_end)
@@ -102,11 +102,11 @@ class DoctorSchedule(models.Model):
             elif end_time:
                 time_label = end_time
             else:
-                time_label = _("No time")
+                time_label = self.env._("No time")
 
-            type_label = rec._selection_label("schedule_type", rec.schedule_type) or _("Schedule")
+            type_label = rec._selection_label("schedule_type", rec.schedule_type) or self.env._("Schedule")
             if doctor_name:
-                display = _(
+                display = self.env._(
                     "%(doctor)s - %(day)s %(time)s (%(type)s)",
                     doctor=doctor_name,
                     day=day_label,
@@ -114,7 +114,7 @@ class DoctorSchedule(models.Model):
                     type=type_label,
                 )
             else:
-                display = _(
+                display = self.env._(
                     "%(day)s %(time)s (%(type)s)",
                     day=day_label,
                     time=time_label,
@@ -135,10 +135,10 @@ class DoctorSchedule(models.Model):
     @api.constrains("time_start", "time_end")
     def _check_time_range(self):
         for rec in self:
-            validate_time_value(rec.time_start, _("Start time"))
-            validate_time_value(rec.time_end, _("End time"))
+            validate_time_value(self.env, rec.time_start, self.env._("Start time"))
+            validate_time_value(self.env, rec.time_end, self.env._("End time"))
             if rec.time_end <= rec.time_start:
-                raise ValidationError(_("End time must be later than start time."))
+                raise ValidationError(self.env._("End time must be later than start time."))
 
     @api.constrains("date", "weekday")
     def _check_schedule_day_definition(self):
@@ -176,11 +176,11 @@ class DoctorSchedule(models.Model):
         for rec in self:
             if not rec.date and not rec.weekday:
                 raise ValidationError(
-                    _("Set either a specific date or a weekday for the schedule line.")
+                    self.env._("Set either a specific date or a weekday for the schedule line.")
                 )
             if rec.date and rec.weekday:
                 date_weekday = str(rec.date.weekday())
                 if rec.weekday != date_weekday:
                     raise ValidationError(
-                        _("Weekday must match the selected specific date.")
+                        self.env._("Weekday must match the selected specific date.")
                     )

@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -12,7 +12,7 @@ class MedicalDiagnosis(models.Model):
         compute="_compute_name",
         store=True,
         precompute=True,
-        default=lambda self: _("New Diagnosis"),
+        default=lambda self: self.env._("New Diagnosis"),
     )
 
     visit_id = fields.Many2one(
@@ -76,7 +76,7 @@ class MedicalDiagnosis(models.Model):
         disease_name = self.disease_id.display_name
         visit_name = self.visit_id.name
         if disease_name and visit_name:
-            return _(
+            return self.env._(
                 "%(disease)s (%(visit)s)",
                 disease=disease_name,
                 visit=visit_name,
@@ -84,8 +84,8 @@ class MedicalDiagnosis(models.Model):
         if disease_name:
             return disease_name
         if visit_name:
-            return _("Diagnosis for %(visit)s", visit=visit_name)
-        return _("New Diagnosis")
+            return self.env._("Diagnosis for %(visit)s", visit=visit_name)
+        return self.env._("New Diagnosis")
 
     @api.depends("disease_id", "disease_id.name", "visit_id", "visit_id.name")
     def _compute_name(self):
@@ -118,7 +118,7 @@ class MedicalDiagnosis(models.Model):
             [("user_id", "=", self.env.user.id)], limit=1
         )
         if not doctor:
-            raise ValidationError(_("Current user is not linked to a doctor."))
+            raise ValidationError(self.env._("Current user is not linked to a doctor."))
         return doctor
 
     def _approval_values_for_current_user(self):
@@ -148,7 +148,7 @@ class MedicalDiagnosis(models.Model):
     def _check_approval(self):
         for rec in self:
             if rec.approved and not rec.approved_by_doctor_id:
-                raise ValidationError(_("Approved diagnosis must have an approving doctor."))
+                raise ValidationError(self.env._("Approved diagnosis must have an approving doctor."))
             if not rec.approved or not rec.visit_id.doctor_id:
                 continue
             if not rec.visit_id.doctor_id.is_intern:
@@ -157,11 +157,11 @@ class MedicalDiagnosis(models.Model):
             mentor = rec.visit_id.doctor_id.mentor_id
             if not mentor:
                 raise ValidationError(
-                    _("Intern doctor must have a mentor before diagnosis approval.")
+                    self.env._("Intern doctor must have a mentor before diagnosis approval.")
                 )
             if rec.approved_by_doctor_id != mentor:
                 raise ValidationError(
-                    _("Diagnosis for an intern visit can only be approved by the mentor doctor.")
+                    self.env._("Diagnosis for an intern visit can only be approved by the mentor doctor.")
                 )
 
     def action_approve(self):

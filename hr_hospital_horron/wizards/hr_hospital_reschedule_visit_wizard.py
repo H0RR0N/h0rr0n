@@ -1,6 +1,6 @@
 from datetime import datetime, time
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..utils import normalize_time_value, validate_time_value
@@ -35,20 +35,20 @@ class RescheduleVisitWizard(models.TransientModel):
     @api.constrains("new_time")
     def _check_new_time(self):
         for rec in self:
-            validate_time_value(rec.new_time)
+            validate_time_value(self.env, rec.new_time)
 
     def action_reschedule(self):
         self.ensure_one()
         visit = self.current_visit_id
         if visit.state == "done":
-            raise ValidationError(_("Completed visits cannot be rescheduled."))
+            raise ValidationError(self.env._("Completed visits cannot be rescheduled."))
         self.new_time = normalize_time_value(self.new_time)
-        validate_time_value(self.new_time)
+        validate_time_value(self.env, self.new_time)
 
         total_minutes = int(round(self.new_time * 60))
         new_hour, new_minute = divmod(total_minutes, 60)
         if new_hour >= 24:
-            raise ValidationError(_("Time must be between 00:00 and 23:59."))
+            raise ValidationError(self.env._("Time must be between 00:00 and 23:59."))
 
         new_datetime = datetime.combine(self.new_date, time(new_hour, new_minute))
 
