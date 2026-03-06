@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="vesna_macarons_courier" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>center_main</name>
+    <trkseg>
+      <trkpt lat="46.4700" lon="30.7100"></trkpt>
+      <trkpt lat="46.4800" lon="30.7250"></trkpt>
+      <trkpt lat="46.4850" lon="30.7400"></trkpt>
+      <trkpt lat="46.4900" lon="30.7550"></trkpt>
+    </trkseg>
+  </trk>
+</gpx>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="courier_zone_rule_user" model="ir.rule">
+            <field name="name">Courier Zone User Scope</field>
+            <field name="model_id" ref="model_courier_zone"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_user'))]"/>
+            <field name="domain_force">[('courier_user_ids', 'in', [user.id])]</field>
+        </record>
+
+        <record id="courier_route_rule_user" model="ir.rule">
+            <field name="name">Courier Route User Scope</field>
+            <field name="model_id" ref="model_courier_route"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_user'))]"/>
+            <field name="domain_force">['|', ('courier_id', '=', user.id), ('zone_id.courier_user_ids', 'in', [user.id])]</field>
+        </record>
+
+        <record id="courier_batch_rule_user" model="ir.rule">
+            <field name="name">Courier Batch User Scope</field>
+            <field name="model_id" ref="model_courier_dispatch_batch"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_user'))]"/>
+            <field name="domain_force">[('zone_id.courier_user_ids', 'in', [user.id])]</field>
+        </record>
+
+        <record id="courier_zone_rule_admin" model="ir.rule">
+            <field name="name">Courier Zone Admin Scope</field>
+            <field name="model_id" ref="model_courier_zone"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="courier_route_rule_admin" model="ir.rule">
+            <field name="name">Courier Route Admin Scope</field>
+            <field name="model_id" ref="model_courier_route"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="courier_batch_rule_admin" model="ir.rule">
+            <field name="name">Courier Batch Admin Scope</field>
+            <field name="model_id" ref="model_courier_dispatch_batch"/>
+            <field name="groups" eval="[(4, ref('vesna_macarons_courier.group_courier_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

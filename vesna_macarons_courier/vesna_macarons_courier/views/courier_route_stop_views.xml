@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_courier_route_stop_tree" model="ir.ui.view">
+        <field name="name">courier.route.stop.tree</field>
+        <field name="model">courier.route.stop</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="route_id"/>
+                <field name="sequence"/>
+                <field name="partner_id"/>
+                <field name="picking_id"/>
+                <field name="status"/>
+                <field name="delivered_at"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_courier_route_stop_form" model="ir.ui.view">
+        <field name="name">courier.route.stop.form</field>
+        <field name="model">courier.route.stop</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_delivered" type="object" string="Delivered" class="btn-primary" states="pending,failed"/>
+                    <button name="action_mark_failed" type="object" string="Failed" class="btn-secondary" states="pending,delivered"/>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,delivered,failed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="route_id"/>
+                            <field name="sequence"/>
+                            <field name="zone_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="picking_id"/>
+                            <field name="partner_id"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="delivered_at" readonly="1"/>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_courier_route_stop" model="ir.actions.act_window">
+        <field name="name">Route Stops</field>
+        <field name="res_model">courier.route.stop</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

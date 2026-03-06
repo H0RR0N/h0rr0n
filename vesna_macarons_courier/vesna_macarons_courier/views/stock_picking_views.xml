@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_picking_form_courier" model="ir.ui.view">
+        <field name="name">stock.picking.form.courier</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group" position="after">
+                <group string="Courier Routing">
+                    <group>
+                        <field name="courier_zone_id"/>
+                        <field name="courier_route_id"/>
+                        <field name="courier_stop_id"/>
+                    </group>
+                    <group>
+                        <field name="courier_courier_id" readonly="1"/>
+                        <field name="courier_delivery_sequence"/>
+                        <field name="courier_route_state" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_courier_zone_user,courier.zone user,model_courier_zone,vesna_macarons_courier.group_courier_user,1,1,0,0
+access_courier_zone_admin,courier.zone admin,model_courier_zone,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_gpx_track_user,courier.gpx.track user,model_courier_gpx_track,vesna_macarons_courier.group_courier_user,1,1,0,0
+access_courier_gpx_track_admin,courier.gpx.track admin,model_courier_gpx_track,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_dispatch_batch_user,courier.dispatch.batch user,model_courier_dispatch_batch,vesna_macarons_courier.group_courier_user,1,1,1,0
+access_courier_dispatch_batch_admin,courier.dispatch.batch admin,model_courier_dispatch_batch,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_route_user,courier.route user,model_courier_route,vesna_macarons_courier.group_courier_user,1,1,1,0
+access_courier_route_admin,courier.route admin,model_courier_route,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_route_stop_user,courier.route.stop user,model_courier_route_stop,vesna_macarons_courier.group_courier_user,1,1,1,0
+access_courier_route_stop_admin,courier.route.stop admin,model_courier_route_stop,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_driver_shift_user,courier.driver.shift user,model_courier_driver_shift,vesna_macarons_courier.group_courier_user,1,1,1,0
+access_courier_driver_shift_admin,courier.driver.shift admin,model_courier_driver_shift,vesna_macarons_courier.group_courier_admin,1,1,1,1
+access_courier_route_generate_wizard_user,courier.route.generate.wizard user,model_courier_route_generate_wizard,vesna_macarons_courier.group_courier_user,1,1,1,1
+access_courier_route_generate_wizard_admin,courier.route.generate.wizard admin,model_courier_route_generate_wizard,vesna_macarons_courier.group_courier_admin,1,1,1,1

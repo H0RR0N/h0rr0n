@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_courier_route_tree" model="ir.ui.view">
+        <field name="name">courier.route.tree</field>
+        <field name="model">courier.route</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="zone_id"/>
+                <field name="courier_id"/>
+                <field name="date_planned"/>
+                <field name="total_stops"/>
+                <field name="delivered_stops"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_courier_route_kanban" model="ir.ui.view">
+        <field name="name">courier.route.kanban</field>
+        <field name="model">courier.route</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="zone_id"/></div>
+                            <div><field name="courier_id"/></div>
+                            <div>
+                                <field name="delivered_stops"/> / <field name="total_stops"/> stops
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_courier_route_form" model="ir.ui.view">
+        <field name="name">courier.route.form</field>
+        <field name="model">courier.route</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_generate_wizard" type="object" string="Generate Stops" class="btn-secondary"/>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" states="draft"/>
+                    <button name="action_done" type="object" string="Done" class="btn-primary" states="in_progress"/>
+                    <button name="action_print_route_sheet" type="object" string="Print Route Sheet" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="zone_id"/>
+                            <field name="courier_id"/>
+                            <field name="batch_id"/>
+                        </group>
+                        <group>
+                            <field name="date_planned"/>
+                            <field name="track_id" domain="[('zone_id', '=', zone_id)]"/>
+                            <field name="total_stops" readonly="1"/>
+                            <field name="delivered_stops" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                    <notebook>
+                        <page string="Stops">
+                            <field name="stop_ids" context="{'default_route_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="partner_id"/>
+                                    <field name="picking_id"/>
+                                    <field name="latitude"/>
+                                    <field name="longitude"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Track GeoJSON">
+                            <field name="line_geojson" readonly="1" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_courier_route_search" model="ir.ui.view">
+        <field name="name">courier.route.search</field>
+        <field name="model">courier.route</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="zone_id"/>
+                <field name="courier_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_courier_route" model="ir.actions.act_window">
+        <field name="name">Routes</field>
+        <field name="res_model">courier.route</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_courier_route_search"/>
+    </record>
+</odoo>

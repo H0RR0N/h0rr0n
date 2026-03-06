@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_form_courier" model="ir.ui.view">
+        <field name="name">res.partner.form.courier</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Courier">
+                    <group>
+                        <group>
+                            <field name="courier_latitude"/>
+                            <field name="courier_longitude"/>
+                            <field name="courier_zone_manual"/>
+                        </group>
+                        <group>
+                            <field name="courier_zone_id"/>
+                            <field name="courier_zone_note"/>
+                        </group>
+                    </group>
+                    <group>
+                        <button name="action_recompute_courier_zone" type="object" string="Recompute Zone" class="btn-secondary"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

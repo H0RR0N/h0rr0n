@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="vesna_macarons_courier" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>north_main</name>
+    <trkseg>
+      <trkpt lat="46.5200" lon="30.7100"></trkpt>
+      <trkpt lat="46.5250" lon="30.7300"></trkpt>
+      <trkpt lat="46.5350" lon="30.7450"></trkpt>
+      <trkpt lat="46.5400" lon="30.7600"></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
