@@ -22,7 +22,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_create_visit" type="object" string="New Visit"/>
+                    <button name="action_create_visit" type="object" string="New Visit" groups="hr_hospital_horron.group_hr_hospital_doctor"/>
                     <button name="%(hr_hospital_patient_card_export_wizard_action)d" type="action" string="Export Card" class="oe_highlight"/>
                 </header>
                 <sheet>
@@ -56,6 +56,7 @@
                         <group>
                             <field name="phone"/>
                             <field name="email"/>
+                            <field name="user_id" groups="hr_hospital_horron.group_hr_hospital_admin"/>
                             <field name="citizenship_country_id"/>
                             <field name="language_id"/>
                             <field name="passport_number"/>

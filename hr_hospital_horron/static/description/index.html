@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        :root {
+            --bg: #f3f8f7;
+            --surface: #ffffff;
+            --surface-soft: #f7fbfb;
+            --text: #1f2d2c;
+            --muted: #4f6663;
+            --accent: #0f8b8d;
+            --accent-2: #125d98;
+            --ok: #2f9e44;
+            --line: #d9e8e5;
+            --shadow: 0 10px 30px rgba(11, 45, 54, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px;
+            background: radial-gradient(circle at top right, #dff3f0, var(--bg) 35%);
+            color: var(--text);
+            font-family: 'Trebuchet MS', 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .hero {
+            padding: 28px 28px 18px;
+            background: linear-gradient(135deg, #e8f7f4 0%, #eaf1fb 100%);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .badges {
+            margin-bottom: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            margin: 0 8px 8px 0;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .badge-accent {
+            color: #fff;
+            background: var(--accent);
+        }
+
+        .badge-info {
+            color: #fff;
+            background: var(--accent-2);
+        }
+
+        .badge-ok {
+            color: #fff;
+            background: var(--ok);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+            line-height: 1.15;
+            color: #0e3a3b;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 24px;
+            line-height: 1.2;
+            color: #114547;
+        }
+
+        h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            color: #1a5150;
+        }
+
+        p {
+            margin: 0 0 12px;
+        }
+
+        .lead {
+            max-width: 840px;
+            color: #2f4d4d;
+            font-size: 17px;
+        }
+
+        .content {
+            padding: 24px 28px 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface-soft);
+            padding: 12px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 24px;
+            line-height: 1;
+            margin-bottom: 4px;
+            color: #0f5b5d;
+        }
+
+        .stat span {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px;
+            background: #fff;
+        }
+
+        .list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .list li {
+            margin-bottom: 6px;
+        }
+
+        .workflow {
+            counter-reset: step;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .workflow li {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 12px 14px;
+            background: var(--surface-soft);
+        }
+
+        .workflow li::before {
+            counter-increment: step;
+            content: 'Step ' counter(step) ' - ';
+            font-weight: 700;
+            color: var(--accent-2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #edf7f6;
+            color: #194f50;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 580px) {
+            body {
+                padding: 12px;
+            }
+
+            .hero,
+            .content {
+                padding: 16px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="hero">
+        <div class="badges">
+            <span class="badge badge-accent">Odoo 19</span>
+            <span class="badge badge-info">Healthcare</span>
+            <span class="badge badge-ok">LGPL-3</span>
+        </div>
+        <h1>HR Hospital</h1>
+        <p class="lead">
+            A practical end-to-end hospital workflow module for Odoo.
+            It helps teams move from scattered records to a single process:
+            patient profile, doctor assignment, visit planning, diagnosis control,
+            schedule management, and audit-friendly role access.
+        </p>
+    </div>
+
+    <div class="content">
+        <div class="stats">
+            <div class="stat"><strong>9</strong><span> Core business models</span></div>
+            <div class="stat"><strong>5</strong><span> Security role levels</span></div>
+            <div class="stat"><strong>5</strong><span> Operational wizards</span></div>
+            <div class="stat"><strong>2</strong><span> Languages (EN + UK)</span></div>
+        </div>
+
+        <div class="section">
+            <h2>Why Teams Use This Module</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Faster Front Desk Flow</h3>
+                    <p>Create and manage patient visits quickly with date validation,
+                    doctor availability checks, and repeatable scheduling workflows.</p>
+                </div>
+                <div class="card">
+                    <h3>Clear Clinical Responsibility</h3>
+                    <p>Support intern-to-mentor work format with diagnosis approval,
+                    patient-doctor history tracking, and controlled access by role.</p>
+                </div>
+                <div class="card">
+                    <h3>Operational Visibility</h3>
+                    <p>Use list, calendar, pivot, and graph views for visits and diagnoses,
+                    plus export/report wizards for managers.</p>
+                </div>
+                <div class="card">
+                    <h3>Training-Friendly Architecture</h3>
+                    <p>Well-structured models, demo data, tests, and Ukrainian translation
+                    make it suitable for learning and team onboarding.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Core Capabilities</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Patient & Doctor Records</h3>
+                    <ul class="list">
+                        <li>Rich patient profile with contact, insurance, allergies, and blood group</li>
+                        <li>Doctor profile with speciality, license metadata, intern/mentor links</li>
+                        <li>Doctor reassignment history for traceability</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Visit Lifecycle</h3>
+                    <ul class="list">
+                        <li>Planned, Done, Cancelled, No Show states</li>
+                        <li>Duplicate-per-day prevention for patient-doctor pair</li>
+                        <li>Weekend and blocked schedule protection</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Diagnosis & Disease Classifier</h3>
+                    <ul class="list">
+                        <li>Diagnosis records linked to visits with severity and treatment notes</li>
+                        <li>Approval flow for intern-created diagnoses</li>
+                        <li>Disease hierarchy with ICD-10 and danger levels</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Automation Wizards</h3>
+                    <ul class="list">
+                        <li>Visit rescheduling</li>
+                        <li>Mass doctor reassignment</li>
+                        <li>Disease report generation</li>
+                        <li>Patient card export (JSON/CSV)</li>
+                        <li>Bulk doctor schedule generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Typical Workflow</h2>
+            <ol class="workflow">
+                <li>Register doctor specialities and doctors (including intern-mentor relationships).</li>
+                <li>Create patient cards and assign personal doctors.</li>
+                <li>Plan visits and validate date/time availability automatically.</li>
+                <li>Record diagnoses and complete mentor approval when required.</li>
+                <li>Use reports and exports for management and operational control.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Access Control Matrix</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Visit Permissions</th>
+                    <th>Scope</th>
+                    <th>Delete Rights</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><strong>Patient</strong></td>
+                    <td>Read</td>
+                    <td>Own visits only</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Intern</strong></td>
+                    <td>Read / Write</td>
+                    <td>Own visits</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Doctor</strong></td>
+                    <td>Read / Write</td>
+                    <td>Own visits + intern visits</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Manager</strong></td>
+                    <td>Read</td>
+                    <td>All visits</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Administrator</strong></td>
+                    <td>Full access</td>
+                    <td>All hospital records</td>
+                    <td>Yes</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Quick Start</h2>
+            <ol class="list">
+                <li>Install the module from the Apps menu.</li>
+                <li>Open <strong>Settings -> Users &amp; Companies -> Users</strong> and assign Hospital roles.</li>
+                <li>Create specialities, doctors, and patients.</li>
+                <li>Schedule visits and start recording diagnoses.</li>
+            </ol>
+            <p class="muted">Demo data is included to let you test workflows right after installation.</p>
+        </div>
+
+        <div class="section">
+            <h2>Author</h2>
+            <p><strong>H0RR0N</strong></p>
+            <p class="muted">License: LGPL-3</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 { color: #875A7B; border-bottom: 2px solid #875A7B; padding-bottom: 10px; }
+        h2 { color: #875A7B; margin-top: 30px; }
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: bold; margin-right: 5px;
+        }
+        .badge-primary { background-color: #875A7B; color: white; }
+        .badge-success { background-color: #28a745; color: white; }
+        .feature-list { list-style: none; padding: 0; }
+        .feature-list li { padding: 8px 0; border-bottom: 1px solid #eee; }
+        .feature-list li::before { content: "✓ "; color: #28a745; font-weight: bold; }
+        .note {
+            background-color: #fff3cd; border: 1px solid #ffc107;
+            border-radius: 4px; padding: 15px; margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Unique Partner Email</h1>
+
+<p>
+    <span class="badge badge-primary">Odoo 19</span>
+    <span class="badge badge-success">LGPL-3</span>
+</p>
+
+<p>
+    This module prevents having multiple partners (res.partner) with the same
+    email address in the system. It combines an ORM validation check with a
+    database-level unique constraint on the normalized email value.
+</p>
+
+<h2>Features</h2>
+
+<ul class="feature-list">
+    <li><strong>Unique Email Enforcement</strong> — Prevents duplicate emails across all partners</li>
+    <li><strong>Case-Insensitive</strong> — Email comparison is case-insensitive (Test@Example.com = test@example.com)</li>
+    <li><strong>Clear Error Messages</strong> — Shows which partner already uses the email</li>
+    <li><strong>Empty Email Allowed</strong> — Partners without email are not affected</li>
+    <li><strong>Ukrainian Translation</strong> — Full module translation to Ukrainian</li>
+</ul>
+
+<h2>Configuration</h2>
+
+<p>No configuration required. Install the module and the constraint is active immediately.</p>
+
+<div class="note">
+    <strong>Note:</strong> If existing partners have duplicate emails, you need
+    to resolve those duplicates before or after installing this module. The
+    validation runs on create/write, and the SQL constraint protects the data
+    at the database level as well.
+</div>
+
+<h2>Credits</h2>
+
+<p><strong>Author:</strong> H0RR0N</p>
+<p><strong>License:</strong> LGPL-3</p>
+
+</body>
+</html>

@@ -7,69 +7,71 @@ from odoo.exceptions import ValidationError
 
 
 class HospitalVisit(models.Model):
-    _name = "hr.hospital.visit"
-    _description = "Patient Visit"
-    _order = "visit_date desc"
+    """Business model for HospitalVisit records."""
+    _name = 'hr.hospital.visit'
+    _description = 'Patient Visit'
+    _order = 'visit_date desc'
 
-    name = fields.Char(string="Reference", required=True, default="/")
+    name = fields.Char(string='Reference', required=True, default='/')
     visit_date = fields.Datetime(
         required=True,
         default=fields.Datetime.now,
     )
     planned_datetime = fields.Datetime(
-        related="visit_date",
+        related='visit_date',
         store=True,
         readonly=False,
-        string="Planned Date",
+        string='Planned Date',
     )
     state = fields.Selection(
         selection=[
-            ("planned", "Planned"),
-            ("done", "Done"),
-            ("cancelled", "Cancelled"),
-            ("no_show", "No Show"),
+            ('planned', 'Planned'),
+            ('done', 'Done'),
+            ('cancelled', 'Cancelled'),
+            ('no_show', 'No Show'),
         ],
-        default="planned",
+        default='planned',
         required=True,
     )
-    actual_datetime = fields.Datetime(string="Actual Date")
+    actual_datetime = fields.Datetime(string='Actual Date')
     patient_id = fields.Many2one(
-        comodel_name="hr.hospital.patient",
+        comodel_name='hr.hospital.patient',
         required=True,
-        ondelete="cascade",
+        ondelete='cascade',
     )
     doctor_id = fields.Many2one(
-        comodel_name="hr.hospital.doctor",
+        comodel_name='hr.hospital.doctor',
         required=True,
-        ondelete="restrict",
-        domain=[("license_number", "!=", False)],
+        ondelete='restrict',
+        domain=[('license_number', '!=', False)],
     )
     visit_type = fields.Selection(
         selection=[
-            ("first", "First"),
-            ("repeat", "Repeat"),
-            ("preventive", "Preventive"),
-            ("emergency", "Emergency"),
+            ('first', 'First'),
+            ('repeat', 'Repeat'),
+            ('preventive', 'Preventive'),
+            ('emergency', 'Emergency'),
         ],
     )
     diagnosis_ids = fields.One2many(
-        comodel_name="hr.hospital.medical.diagnosis",
-        inverse_name="visit_id",
+        comodel_name='hr.hospital.medical.diagnosis',
+        inverse_name='visit_id',
     )
     recommendations = fields.Html()
-    fee = fields.Monetary(currency_field="currency_id")
+    fee = fields.Monetary(currency_field='currency_id')
     currency_id = fields.Many2one(
-        comodel_name="res.currency",
+        comodel_name='res.currency',
         default=lambda self: self.env.company.currency_id.id,
     )
 
     @api.model_create_multi
     def create(self, vals_list):
+        """Create records with module-specific preprocessing."""
         normalized = []
         for vals in vals_list:
             vals = dict(vals)
-            if not vals.get("visit_date") and vals.get("planned_datetime"):
-                vals["visit_date"] = vals["planned_datetime"]
+            if not vals.get('visit_date') and vals.get('planned_datetime'):
+                vals['visit_date'] = vals['planned_datetime']
             normalized.append(vals)
         return super().create(normalized)
 
@@ -83,7 +85,7 @@ class HospitalVisit(models.Model):
         """Compute UTC bounds for the user's local day containing dt."""
         if not dt:
             return None, None
-        tzname = self.env.context.get("tz") or self.env.user.tz or "UTC"
+        tzname = self.env.context.get('tz') or self.env.user.tz or 'UTC'
         tz = pytz.timezone(tzname)
         local_dt = self._localize_datetime(dt)
         local_date = local_dt.date()
@@ -94,39 +96,41 @@ class HospitalVisit(models.Model):
         return start_utc, end_utc
 
     def _build_day_exclusion_domain(self, target_date):
+        """Build day exclusion domain."""
         day_start = datetime.combine(target_date, time.min)
         day_end = datetime.combine(target_date, time.max)
         return [
-            "!",
-            "&",
-            ("planned_datetime", ">=", day_start),
-            ("planned_datetime", "<=", day_end),
+            '!',
+            '&',
+            ('planned_datetime', '>=', day_start),
+            ('planned_datetime', '<=', day_end),
         ]
 
     def _get_blocked_schedule_dates(self, start_date, end_date):
-        blocked_types = ["vacation", "sick", "conference"]
-        schedule_model = self.env["hr.hospital.doctor.schedule"]
+        """Return blocked schedule dates."""
+        blocked_types = ['vacation', 'sick', 'conference']
+        schedule_model = self.env['hr.hospital.doctor.schedule']
         blocked_dates = set()
 
         specific_blocks = schedule_model.search(
             [
-                ("doctor_id", "=", self.doctor_id.id),
-                ("schedule_type", "in", blocked_types),
-                ("date", ">=", start_date),
-                ("date", "<=", end_date),
-            ]
+                ('doctor_id', '=', self.doctor_id.id),
+                ('schedule_type', 'in', blocked_types),
+                ('date', '>=', start_date),
+                ('date', '<=', end_date),
+            ],
         )
-        blocked_dates.update(d for d in specific_blocks.mapped("date") if d)
+        blocked_dates.update(d for d in specific_blocks.mapped('date') if d)
 
         weekday_blocks = schedule_model.search(
             [
-                ("doctor_id", "=", self.doctor_id.id),
-                ("schedule_type", "in", blocked_types),
-                ("date", "=", False),
-                ("weekday", "!=", False),
-            ]
+                ('doctor_id', '=', self.doctor_id.id),
+                ('schedule_type', 'in', blocked_types),
+                ('date', '=', False),
+                ('weekday', '!=', False),
+            ],
         )
-        blocked_weekdays = {int(code) for code in weekday_blocks.mapped("weekday")}
+        blocked_weekdays = {int(code) for code in weekday_blocks.mapped('weekday')}
 
         if blocked_weekdays:
             cursor = start_date
@@ -138,37 +142,39 @@ class HospitalVisit(models.Model):
         return blocked_dates
 
     def _get_available_doctor_domain(self):
-        domain = [("license_number", "!=", False)]
+        """Return available doctor domain."""
+        domain = [('license_number', '!=', False)]
         if self.patient_id and self.patient_id.personal_doctor_id.speciality_id:
             domain.append(
-                ("speciality_id", "=", self.patient_id.personal_doctor_id.speciality_id.id)
+                ('speciality_id', '=', self.patient_id.personal_doctor_id.speciality_id.id),
             )
         if self.planned_datetime:
             local_dt = self._localize_datetime(self.planned_datetime)
             target_date = local_dt.date()
             weekday = str(target_date.weekday())
             time_float = local_dt.hour + local_dt.minute / 60.0
-            schedules = self.env["hr.hospital.doctor.schedule"].search(
+            schedules = self.env['hr.hospital.doctor.schedule'].search(
                 [
-                    ("schedule_type", "=", "work"),
-                    ("time_start", "<=", time_float),
-                    ("time_end", ">=", time_float),
-                    "|",
-                    ("date", "=", target_date),
-                    "&",
-                    ("date", "=", False),
-                    ("weekday", "=", weekday),
-                ]
+                    ('schedule_type', '=', 'work'),
+                    ('time_start', '<=', time_float),
+                    ('time_end', '>=', time_float),
+                    '|',
+                    ('date', '=', target_date),
+                    '&',
+                    ('date', '=', False),
+                    ('weekday', '=', weekday),
+                ],
             )
-            doctor_ids = schedules.mapped("doctor_id").ids
+            doctor_ids = schedules.mapped('doctor_id').ids
             if doctor_ids:
-                domain.append(("id", "in", doctor_ids))
+                domain.append(('id', 'in', doctor_ids))
             else:
-                domain.append(("id", "=", 0))
+                domain.append(('id', '=', 0))
         return domain
 
     def _get_available_dates_domain(self):
-        domain = [("planned_datetime", ">=", fields.Datetime.now())]
+        """Return available dates domain."""
+        domain = [('planned_datetime', '>=', fields.Datetime.now())]
         if not self.doctor_id:
             return domain
 
@@ -187,51 +193,54 @@ class HospitalVisit(models.Model):
             domain += self._build_day_exclusion_domain(blocked_date)
         return domain
 
-    @api.onchange("patient_id", "planned_datetime")
+    @api.onchange('patient_id', 'planned_datetime')
     def _onchange_patient_or_datetime(self):
+        """Handle onchange for patient or datetime."""
         if self.patient_id and self.patient_id.allergies:
             return {
-                "warning": {
-                    "title": self.env._("Allergies"),
-                    "message": self.patient_id.allergies,
+                'warning': {
+                    'title': self.env._('Allergies'),
+                    'message': self.patient_id.allergies,
                 },
-                "domain": {"doctor_id": self._get_available_doctor_domain()},
+                'domain': {'doctor_id': self._get_available_doctor_domain()},
             }
-        return {"domain": {"doctor_id": self._get_available_doctor_domain()}}
+        return {'domain': {'doctor_id': self._get_available_doctor_domain()}}
 
-    @api.onchange("doctor_id")
+    @api.onchange('doctor_id')
     def _onchange_doctor(self):
+        """Handle onchange for doctor."""
         if not self.doctor_id or not self.planned_datetime:
-            return {"domain": {"planned_datetime": self._get_available_dates_domain()}}
+            return {'domain': {'planned_datetime': self._get_available_dates_domain()}}
 
         local_dt = self._localize_datetime(self.planned_datetime)
         target_date = local_dt.date()
         weekday = str(target_date.weekday())
         time_float = local_dt.hour + local_dt.minute / 60.0
-        block = self.env["hr.hospital.doctor.schedule"].search_count(
+        block = self.env['hr.hospital.doctor.schedule'].search_count(
             [
-                ("doctor_id", "=", self.doctor_id.id),
-                ("schedule_type", "in", ["vacation", "sick", "conference"]),
-                ("time_start", "<=", time_float),
-                ("time_end", ">=", time_float),
-                "|",
-                ("date", "=", target_date),
-                "&",
-                ("date", "=", False),
-                ("weekday", "=", weekday),
-            ]
+                ('doctor_id', '=', self.doctor_id.id),
+                ('schedule_type', 'in', ['vacation', 'sick', 'conference']),
+                ('time_start', '<=', time_float),
+                ('time_end', '>=', time_float),
+                '|',
+                ('date', '=', target_date),
+                '&',
+                ('date', '=', False),
+                ('weekday', '=', weekday),
+            ],
         )
-        if block or weekday in ("5", "6"):
+        if block or weekday in ('5', '6'):
             return {
-                "warning": {
-                    "title": self.env._("Unavailable Date"),
-                    "message": self.env._("Selected date/time is not available for this doctor."),
-                }
+                'warning': {
+                    'title': self.env._('Unavailable Date'),
+                    'message': self.env._('Selected date/time is not available for this doctor.'),
+                },
             }
-        return {"domain": {"planned_datetime": self._get_available_dates_domain()}}
+        return {'domain': {'planned_datetime': self._get_available_dates_domain()}}
 
-    @api.constrains("patient_id", "doctor_id", "planned_datetime", "state")
+    @api.constrains('patient_id', 'doctor_id', 'planned_datetime', 'state')
     def _check_unique_visit_per_day(self):
+        """Validate unique visit per day."""
         for rec in self:
             if not rec.patient_id or not rec.doctor_id or not rec.planned_datetime:
                 continue
@@ -240,55 +249,57 @@ class HospitalVisit(models.Model):
                 continue
             duplicate = self.search_count(
                 [
-                    ("id", "!=", rec.id),
-                    ("patient_id", "=", rec.patient_id.id),
-                    ("doctor_id", "=", rec.doctor_id.id),
-                    ("state", "!=", "cancelled"),
-                    ("planned_datetime", ">=", start),
-                    ("planned_datetime", "<=", end),
-                ]
+                    ('id', '!=', rec.id),
+                    ('patient_id', '=', rec.patient_id.id),
+                    ('doctor_id', '=', rec.doctor_id.id),
+                    ('state', '!=', 'cancelled'),
+                    ('planned_datetime', '>=', start),
+                    ('planned_datetime', '<=', end),
+                ],
             )
             if duplicate:
                 raise ValidationError(
-                    self.env._("Patient cannot be scheduled with the same doctor more than once per day.")
+                    self.env._('Patient cannot be scheduled with the same doctor more than once per day.'),
                 )
 
-    @api.constrains("planned_datetime", "doctor_id")
+    @api.constrains('planned_datetime', 'doctor_id')
     def _check_doctor_availability(self):
+        """Validate doctor availability."""
         for rec in self:
             if not rec.planned_datetime or not rec.doctor_id:
                 continue
             local_dt = rec._localize_datetime(rec.planned_datetime)
             weekday = local_dt.weekday()
             if weekday >= 5:
-                raise ValidationError(self.env._("Visits cannot be scheduled on weekends."))
+                raise ValidationError(self.env._('Visits cannot be scheduled on weekends.'))
 
             time_float = local_dt.hour + local_dt.minute / 60.0
             target_date = local_dt.date()
-            blocked = self.env["hr.hospital.doctor.schedule"].search_count(
+            blocked = self.env['hr.hospital.doctor.schedule'].search_count(
                 [
-                    ("doctor_id", "=", rec.doctor_id.id),
-                    ("schedule_type", "in", ["vacation", "sick", "conference"]),
-                    ("time_start", "<=", time_float),
-                    ("time_end", ">=", time_float),
-                    "|",
-                    ("date", "=", target_date),
-                    "&",
-                    ("date", "=", False),
-                    ("weekday", "=", str(weekday)),
-                ]
+                    ('doctor_id', '=', rec.doctor_id.id),
+                    ('schedule_type', 'in', ['vacation', 'sick', 'conference']),
+                    ('time_start', '<=', time_float),
+                    ('time_end', '>=', time_float),
+                    '|',
+                    ('date', '=', target_date),
+                    '&',
+                    ('date', '=', False),
+                    ('weekday', '=', str(weekday)),
+                ],
             )
             if blocked:
                 raise ValidationError(
-                    self.env._("Selected date/time is not available for this doctor.")
+                    self.env._('Selected date/time is not available for this doctor.'),
                 )
 
-    @api.constrains("state", "planned_datetime", "actual_datetime")
+    @api.constrains('state', 'planned_datetime', 'actual_datetime')
     def _check_actual_datetime_rules(self):
+        """Validate actual datetime rules."""
         for rec in self:
-            if rec.actual_datetime and rec.state != "done":
+            if rec.actual_datetime and rec.state != 'done':
                 raise ValidationError(
-                    self.env._("Actual visit datetime can be set only for completed visits.")
+                    self.env._('Actual visit datetime can be set only for completed visits.'),
                 )
             if (
                 rec.actual_datetime
@@ -296,12 +307,13 @@ class HospitalVisit(models.Model):
                 and rec.actual_datetime < rec.planned_datetime
             ):
                 raise ValidationError(
-                    self.env._("Actual visit datetime cannot be earlier than planned datetime.")
+                    self.env._('Actual visit datetime cannot be earlier than planned datetime.'),
                 )
 
-    @api.constrains("doctor_id", "planned_datetime", "visit_date", "actual_datetime", "state")
+    @api.constrains('doctor_id', 'planned_datetime', 'visit_date', 'actual_datetime', 'state')
     def _check_past_visit_protected_field_changes(self):
-        old_values = self.env.context.get("visit_old_values") or {}
+        """Validate past visit protected field changes."""
+        old_values = self.env.context.get('visit_old_values') or {}
         if not old_values:
             return
 
@@ -311,49 +323,51 @@ class HospitalVisit(models.Model):
             if not previous:
                 continue
 
-            doctor_changed = rec.doctor_id.id != previous["doctor_id"]
-            planned_changed = rec.planned_datetime != previous["planned_datetime"]
-            visit_date_changed = rec.visit_date != previous["visit_date"]
-            actual_datetime_changed = rec.actual_datetime != previous["actual_datetime"]
+            doctor_changed = rec.doctor_id.id != previous['doctor_id']
+            planned_changed = rec.planned_datetime != previous['planned_datetime']
+            visit_date_changed = rec.visit_date != previous['visit_date']
+            actual_datetime_changed = rec.actual_datetime != previous['actual_datetime']
 
-            if previous["state"] == "done" and (
+            if previous['state'] == 'done' and (
                 doctor_changed
                 or planned_changed
                 or visit_date_changed
                 or actual_datetime_changed
             ):
                 raise ValidationError(
-                    self.env._("Cannot change doctor or date/time for completed visits.")
+                    self.env._('Cannot change doctor or date/time for completed visits.'),
                 )
 
-            previous_planned_dt = previous["planned_datetime"] or previous["visit_date"]
-            if previous_planned_dt and previous_planned_dt < now and previous["state"] != "cancelled":
+            previous_planned_dt = previous['planned_datetime'] or previous['visit_date']
+            if previous_planned_dt and previous_planned_dt < now and previous['state'] != 'cancelled':
                 if doctor_changed or planned_changed or visit_date_changed:
                     raise ValidationError(
-                        self.env._("Cannot change doctor or planned date/time for visits that already occurred.")
+                        self.env._('Cannot change doctor or planned date/time for visits that already occurred.'),
                     )
 
     def write(self, vals):
+        """Update records with module-specific business rules."""
         vals = dict(vals)
-        tracked_fields = {"doctor_id", "planned_datetime", "visit_date", "actual_datetime"}
+        tracked_fields = {'doctor_id', 'planned_datetime', 'visit_date', 'actual_datetime'}
         if not tracked_fields.intersection(vals):
             return super().write(vals)
 
         old_values = {}
         for rec in self:
             old_values[rec.id] = {
-                "state": rec.state,
-                "doctor_id": rec.doctor_id.id,
-                "planned_datetime": rec.planned_datetime,
-                "visit_date": rec.visit_date,
-                "actual_datetime": rec.actual_datetime,
+                'state': rec.state,
+                'doctor_id': rec.doctor_id.id,
+                'planned_datetime': rec.planned_datetime,
+                'visit_date': rec.visit_date,
+                'actual_datetime': rec.actual_datetime,
             }
         return super(HospitalVisit, self.with_context(visit_old_values=old_values)).write(vals)
 
     def unlink(self):
+        """Delete records after business validations."""
         for rec in self:
             if rec.diagnosis_ids:
                 raise ValidationError(
-                    self.env._("Cannot delete visits that have diagnoses attached.")
+                    self.env._('Cannot delete visits that have diagnoses attached.'),
                 )
         return super().unlink()

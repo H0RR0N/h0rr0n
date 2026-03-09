@@ -437,6 +437,7 @@ msgstr "Відображувана назва"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient_doctor_history__doctor_id
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_visit__doctor_id
 #: model:ir.model.fields.selection,name:hr_hospital_horron.selection__hr_hospital_disease_report_wizard__group_by__doctor
+#: model:res.groups,name:hr_hospital_horron.group_hr_hospital_doctor
 msgid "Doctor"
 msgstr "Лікар"
 
@@ -740,6 +741,7 @@ msgstr "Номер страхового полісу"
 
 #. module: hr_hospital_horron
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_doctor__is_intern
+#: model:res.groups,name:hr_hospital_horron.group_hr_hospital_intern
 msgid "Intern"
 msgstr "Інтерн"
 
@@ -979,6 +981,7 @@ msgstr "Номер паспорта"
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient_card_export_wizard__patient_id
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient_doctor_history__patient_id
 #: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_visit__patient_id
+#: model:res.groups,name:hr_hospital_horron.group_hr_hospital_patient
 #: model_terms:ir.ui.view,arch_db:hr_hospital_horron.hr_hospital_patient_view_list
 #: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Patient"
@@ -1977,3 +1980,43 @@ msgstr "Пацієнтів не знайдено."
 #: model_terms:ir.ui.view,arch_db:hr_hospital_horron.report_doctor
 msgid "Printed:"
 msgstr "Надруковано:"
+
+#. module: hr_hospital_horron
+#: model:res.groups,name:hr_hospital_horron.group_hr_hospital_manager
+msgid "Manager"
+msgstr "Менеджер"
+
+#. module: hr_hospital_horron
+#: model:res.groups,name:hr_hospital_horron.group_hr_hospital_admin
+msgid "Administrator"
+msgstr "Адміністратор"
+
+#. module: hr_hospital_horron
+#: model:res.groups,comment:hr_hospital_horron.group_hr_hospital_patient
+msgid "Can view own visits only."
+msgstr "Може переглядати лише власні візити."
+
+#. module: hr_hospital_horron
+#: model:res.groups,comment:hr_hospital_horron.group_hr_hospital_intern
+msgid "Can view and edit own visits."
+msgstr "Може переглядати та редагувати власні візити."
+
+#. module: hr_hospital_horron
+#: model:res.groups,comment:hr_hospital_horron.group_hr_hospital_doctor
+msgid "Can view and edit own visits and intern visits."
+msgstr "Може переглядати та редагувати власні візити та візити інтернів."
+
+#. module: hr_hospital_horron
+#: model:res.groups,comment:hr_hospital_horron.group_hr_hospital_manager
+msgid "Can view all visits."
+msgstr "Може переглядати всі візити."
+
+#. module: hr_hospital_horron
+#: model:res.groups,comment:hr_hospital_horron.group_hr_hospital_admin
+msgid "Full access including delete on all data in the module."
+msgstr "Повний доступ, включаючи видалення всіх даних у модулі."
+
+#. module: hr_hospital_horron
+#: model:ir.model.fields,field_description:hr_hospital_horron.field_hr_hospital_patient__user_id
+msgid "Related User"
+msgstr "Пов'язаний користувач"

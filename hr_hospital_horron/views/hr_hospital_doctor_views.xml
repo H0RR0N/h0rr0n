@@ -21,7 +21,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_create_visit" type="object" string="New Visit"/>
+                    <button name="action_create_visit" type="object" string="New Visit" groups="hr_hospital_horron.group_hr_hospital_intern"/>
                 </header>
                 <sheet>
                     <div style="float: right; margin-left: 16px;">
@@ -119,22 +119,6 @@
                 <field name="intern_names"/>
                 <field name="active"/>
                 <templates>
-                    <t t-name="menu">
-                        <a t-if="widget.editable" role="menuitem" type="open" class="dropdown-item">Open</a>
-                        <a t-if="widget.editable" role="menuitem" type="edit" class="dropdown-item">Edit</a>
-                        <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
-                        <div role="separator" class="dropdown-divider"/>
-                        <a t-if="record.active.raw_value"
-                           name="action_archive"
-                           type="object"
-                           role="menuitem"
-                           class="dropdown-item">Archive</a>
-                        <a t-if="!record.active.raw_value"
-                           name="action_unarchive"
-                           type="object"
-                           role="menuitem"
-                           class="dropdown-item">Unarchive</a>
-                    </t>
                     <t t-name="card">
                         <main>
                             <field class="fw-bold fs-5" name="last_name"/>
@@ -155,7 +139,8 @@
                             <button name="action_create_visit"
                                     type="object"
                                     string="New Visit"
-                                    class="btn btn-primary btn-sm"/>
+                                    class="btn btn-primary btn-sm"
+                                    groups="hr_hospital_horron.group_hr_hospital_intern"/>
                         </footer>
                     </t>
                 </templates>
