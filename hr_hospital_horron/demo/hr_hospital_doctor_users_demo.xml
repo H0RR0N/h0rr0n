@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+      Demo users for doctors.
+
+      Purpose:
+      - Make it possible to log in as a doctor.
+      - Provide a stable link between hr.hospital.doctor.user_id and res.users.
+
+      Notes:
+      - Password is set to "demo" for all demo users.
+      - Groups: internal user (base.group_user).
+      - Logins are unique and easy to recognize.
+    -->
+
+    <record id="hr_hospital_user_doctor_ivanov" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Ivan Ivanov</field>
+        <field name="login">dr.ivanov</field>
+        <field name="email">ivan.ivanov@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_petrenko" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Olena Petrenko</field>
+        <field name="login">dr.petrenko</field>
+        <field name="email">olena.petrenko@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_sydorenko" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Mykola Sydorenko</field>
+        <field name="login">dr.sydorenko</field>
+        <field name="email">mykola.sydorenko@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_shevchenko" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Maria Shevchenko</field>
+        <field name="login">dr.shevchenko</field>
+        <field name="email">maria.shevchenko@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_kravets" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Oleg Kravets</field>
+        <field name="login">dr.kravets</field>
+        <field name="email">oleg.kravets@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_melnyk" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Andrii Melnyk</field>
+        <field name="login">dr.melnyk</field>
+        <field name="email">andrii.melnyk@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_doctor')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_intern_koval" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Iryna Koval</field>
+        <field name="login">dr.koval</field>
+        <field name="email">iryna.koval@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_intern')])]"/>
+        <field name="password">demo</field>
+    </record>
+
+    <record id="hr_hospital_user_doctor_intern_savchuk" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">Petro Savchuk</field>
+        <field name="login">dr.savchuk</field>
+        <field name="email">petro.savchuk@demo-hospital.example</field>
+        <field name="group_ids" eval="[(6, 0, [ref('base.group_user'), ref('group_hr_hospital_intern')])]"/>
+        <field name="password">demo</field>
+    </record>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="hr_hospital_speciality_therapy" model="hr.hospital.doctor.speciality">
+        <field name="name">Therapy</field>
+        <field name="code">THER</field>
+        <field name="description">General therapy and primary care</field>
+    </record>
+    <record id="hr_hospital_speciality_cardiology" model="hr.hospital.doctor.speciality">
+        <field name="name">Cardiology</field>
+        <field name="code">CARD</field>
+        <field name="description">Heart and cardiovascular system</field>
+    </record>
+    <record id="hr_hospital_speciality_pediatrics" model="hr.hospital.doctor.speciality">
+        <field name="name">Pediatrics</field>
+        <field name="code">PED</field>
+        <field name="description">Child health care</field>
+    </record>
+    <record id="hr_hospital_speciality_surgery" model="hr.hospital.doctor.speciality">
+        <field name="name">Surgery</field>
+        <field name="code">SURG</field>
+        <field name="description">Surgical treatment</field>
+    </record>
+    <record id="hr_hospital_speciality_neurology" model="hr.hospital.doctor.speciality">
+        <field name="name">Neurology</field>
+        <field name="code">NEUR</field>
+        <field name="description">Nervous system disorders</field>
+    </record>
+</odoo>

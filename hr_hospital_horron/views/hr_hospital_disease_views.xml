@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_hospital_disease_view_list" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.view.list</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="icd10_code"/>
+                <field name="danger_level"/>
+                <field name="is_contagious"/>
+                <field name="parent_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_hospital_disease_view_form" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.view.form</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="icd10_code"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group>
+                            <field name="danger_level"/>
+                            <field name="is_contagious"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="symptoms"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="region_country_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="child_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_hospital_disease_view_search" model="ir.ui.view">
+        <field name="name">hr.hospital.disease.view.search</field>
+        <field name="model">hr.hospital.disease</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="icd10_code"/>
+                <group name="group_by">
+                    <filter name="group_by_parent" string="Parent Disease" context="{'group_by': 'parent_id'}"/>
+                </group>
+                <searchpanel>
+                    <field name="parent_id" string="Disease Hierarchy" hierarchize="1" select="multi" enable_counters="1"/>
+                    <field name="danger_level" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_hospital_disease_action" model="ir.actions.act_window">
+        <field name="name">Diseases</field>
+        <field name="res_model">hr.hospital.disease</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="hr_hospital_disease_view_search"/>
+    </record>
+</odoo>

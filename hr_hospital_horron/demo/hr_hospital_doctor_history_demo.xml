@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!--
+      Demo doctor history:
+      - Mostly one "initial assignment" per patient.
+      - A few patients have a reassignment to demonstrate history tracking.
+    -->
+
+    <!-- Patient 01: stable assignment -->
+    <record id="hr_hospital_history_01" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_01"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="assign_date">2024-01-10</field>
+        <field name="change_reason">Initial assignment (primary care).</field>
+    </record>
+
+    <!-- Patient 02: stable assignment -->
+    <record id="hr_hospital_history_02" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_02"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="assign_date">2024-05-12</field>
+        <field name="change_reason">Initial assignment (cardiology monitoring).</field>
+    </record>
+
+    <!-- Patient 03: stable assignment -->
+    <record id="hr_hospital_history_03" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_03"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="assign_date">2024-07-03</field>
+        <field name="change_reason">Initial assignment (neurology).</field>
+    </record>
+
+    <!-- Patient 04: reassignment example -->
+    <record id="hr_hospital_history_04" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_04"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="assign_date">2024-03-01</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+    <record id="hr_hospital_history_05" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_04"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_melnyk"/>
+        <field name="assign_date">2025-11-15</field>
+        <field name="change_reason">Referred to neurology for follow-up.</field>
+    </record>
+
+    <!-- A few more initial history lines to make the dataset feel complete -->
+    <record id="hr_hospital_history_06" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_05"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_sydorenko"/>
+        <field name="assign_date">2025-02-20</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+
+    <record id="hr_hospital_history_07" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_06"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="assign_date">2024-09-05</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+
+    <record id="hr_hospital_history_08" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_07"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_ivanov"/>
+        <field name="assign_date">2024-10-11</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+
+    <record id="hr_hospital_history_09" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_08"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_shevchenko"/>
+        <field name="assign_date">2025-06-01</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+
+    <record id="hr_hospital_history_10" model="hr.hospital.patient.doctor.history">
+        <field name="patient_id" ref="hr_hospital_patient_09"/>
+        <field name="doctor_id" ref="hr_hospital_doctor_petrenko"/>
+        <field name="assign_date">2025-04-08</field>
+        <field name="change_reason">Initial assignment.</field>
+    </record>
+</odoo>

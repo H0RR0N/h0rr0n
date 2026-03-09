@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="hr_hospital_doctor_report_action" model="ir.actions.report">
+        <field name="name">Doctor Report</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_hospital_horron.report_doctor</field>
+        <field name="report_file">hr_hospital_horron.report_doctor</field>
+        <field name="binding_model_id" ref="model_hr_hospital_doctor"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+        <field name="print_report_name">'Doctor Report - ' + object.full_name</field>
+    </record>
+
+    <template id="report_doctor">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h2>
+                                    <t t-out="o.full_name or o.name"/>
+                                    <t t-if="o.speciality_id">
+                                        <small class="text-muted">
+                                            &#x2014; <t t-out="o.speciality_id.name"/>
+                                        </small>
+                                    </t>
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4>Visit History</h4>
+                                <t t-set="visits" t-value="env['hr.hospital.visit'].search(
+                                    [('doctor_id', '=', o.id)],
+                                    order='visit_date desc'
+                                )"/>
+                                <t t-if="visits">
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Patient</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="visit_type_labels" t-value="dict(env['hr.hospital.visit']._fields['visit_type']._description_selection(env))"/>
+                                            <t t-set="visit_state_labels" t-value="dict(env['hr.hospital.visit']._fields['state']._description_selection(env))"/>
+                                            <t t-foreach="visits" t-as="visit">
+                                                <tr>
+                                                    <td>
+                                                        <t t-out="visit.planned_datetime.strftime('%d/%m/%Y %H:%M') if visit.planned_datetime else ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="visit.patient_id.full_name or visit.patient_id.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="visit_type_labels.get(visit.visit_type, '')"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="visit_state_labels.get(visit.state, '')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted">No visits found.</p>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4>Patients</h4>
+                                <t t-if="o.patient_ids">
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <th>Gender</th>
+                                                <th>Date of Birth</th>
+                                                <th>Phone</th>
+                                                <th>Visit Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="gender_labels" t-value="dict(env['hr.hospital.patient']._fields['gender']._description_selection(env))"/>
+                                            <t t-set="visit_state_labels" t-value="dict(env['hr.hospital.visit']._fields['state']._description_selection(env))"/>
+                                            <t t-foreach="o.patient_ids" t-as="patient">
+                                                <t t-set="last_visit" t-value="env['hr.hospital.visit'].search(
+                                                    [('patient_id', '=', patient.id), ('doctor_id', '=', o.id)],
+                                                    order='visit_date desc',
+                                                    limit=1
+                                                )"/>
+                                                <tr>
+                                                    <td>
+                                                        <t t-out="patient.full_name or patient.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="gender_labels.get(patient.gender, '')"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="patient.birth_date.strftime('%d/%m/%Y') if patient.birth_date else ''"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-out="patient.phone or ''"/>
+                                                    </td>
+                                                    <td class="p-1">
+                                                        <t t-if="last_visit">
+                                                            <t t-set="state_class" t-value="{'planned': 'bg-warning', 'done': 'bg-success text-white', 'cancelled': 'bg-danger text-white'}.get(last_visit.state, 'bg-secondary')"/>
+                                                            <span t-attf-class="d-block rounded px-2 py-1 text-center #{state_class}">
+                                                                <t t-out="visit_state_labels.get(last_visit.state, '')"/>
+                                                            </span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <t t-else="">
+                                    <p class="text-muted">No patients found.</p>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row border-top pt-2 mt-4">
+                            <div class="col-6">
+                                <small>
+                                    Printed: <t t-out="o.get_print_datetime()"/>
+                                </small>
+                            </div>
+                            <div t-if="env.company.city" class="col-6 text-end">
+                                <small t-out="env.company.city"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

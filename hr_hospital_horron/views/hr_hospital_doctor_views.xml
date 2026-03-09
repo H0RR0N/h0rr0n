@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_hospital_doctor_view_list" model="ir.ui.view">
+        <field name="name">hr.hospital.doctor.view.list</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="speciality_id"/>
+                <field name="is_intern"/>
+                <field name="mentor_id"/>
+                <field name="license_number"/>
+                <field name="rating"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_hospital_doctor_view_form" model="ir.ui.view">
+        <field name="name">hr.hospital.doctor.view.form</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_visit" type="object" string="New Visit" groups="hr_hospital_horron.group_hr_hospital_intern"/>
+                </header>
+                <sheet>
+                    <div style="float: right; margin-left: 16px;">
+                        <field name="image_1920" widget="image" class="oe_avatar" nolabel="1" options="{'preview_image': 'image_1920'}"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <div class="oe_clear"/>
+                    <group>
+                        <group>
+                            <field name="last_name"/>
+                            <field name="first_name"/>
+                            <field name="middle_name"/>
+                            <field name="full_name" readonly="1"/>
+                            <field name="gender"/>
+                            <field name="birth_date"/>
+                            <field name="age" readonly="1"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="citizenship_country_id"/>
+                            <field name="language_id"/>
+                            <field name="user_id"/>
+                            <field name="speciality_id"/>
+                            <field name="education_country_id"/>
+                        </group>
+                        <group>
+                            <field name="is_intern"/>
+                            <field name="mentor_id" invisible="not is_intern"/>
+                            <field name="license_number"/>
+                            <field name="license_date"/>
+                            <field name="experience_years" readonly="1"/>
+                            <field name="rating"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mentorship">
+                            <group>
+                                <group string="Mentor Info" invisible="not is_intern">
+                                    <field name="mentor_id" readonly="1"/>
+                                </group>
+                            </group>
+                            <group string="Interns" invisible="is_intern">
+                                <field name="intern_ids" mode="kanban,list" context="{'default_is_intern': True}">
+                                    <kanban>
+                                        <field name="full_name"/>
+                                        <field name="speciality_id"/>
+                                        <field name="phone"/>
+                                        <field name="email"/>
+                                        <field name="is_intern"/>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div class="oe_kanban_global_click o_kanban_record">
+                                                    <div class="o_kanban_record_title">
+                                                        <field name="full_name"/>
+                                                    </div>
+                                                    <div>
+                                                        <field name="speciality_id"/>
+                                                    </div>
+                                                    <div>
+                                                        <field name="phone"/>
+                                                    </div>
+                                                    <div>
+                                                        <field name="email"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Schedules">
+                            <field name="schedule_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_hospital_doctor_view_kanban" model="ir.ui.view">
+        <field name="name">hr.hospital.doctor.view.kanban</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="last_name"/>
+                <field name="first_name"/>
+                <field name="full_name"/>
+                <field name="speciality_id"/>
+                <field name="is_intern"/>
+                <field name="intern_names"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <main>
+                            <field class="fw-bold fs-5" name="last_name"/>
+                            <t t-if="record.first_name.raw_value">
+                                <span class="fw-bold fs-5"> <field name="first_name"/></span>
+                            </t>
+                            <div t-if="record.speciality_id.raw_value" class="text-muted">
+                                <field name="speciality_id"/>
+                            </div>
+                            <div t-if="record.intern_names.raw_value">
+                                <small class="text-muted">Interns:</small>
+                                <div>
+                                    <t t-out="record.intern_names.raw_value"/>
+                                </div>
+                            </div>
+                        </main>
+                        <footer class="pt-1">
+                            <button name="action_create_visit"
+                                    type="object"
+                                    string="New Visit"
+                                    class="btn btn-primary btn-sm"
+                                    groups="hr_hospital_horron.group_hr_hospital_intern"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hr_hospital_doctor_view_search" model="ir.ui.view">
+        <field name="name">hr.hospital.doctor.view.search</field>
+        <field name="model">hr.hospital.doctor</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="full_name"/>
+                <field name="speciality_id"/>
+                <field name="license_number"/>
+                <filter name="interns" string="Interns" domain="[('is_intern', '=', True)]"/>
+                <filter name="mentors" string="Mentors" domain="[('intern_ids', '!=', False)]"/>
+                <group name="group_by">
+                    <filter name="group_by_speciality" string="Speciality" context="{'group_by': 'speciality_id'}"/>
+                    <filter name="group_by_mentor" string="Mentor" context="{'group_by': 'mentor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_hospital_doctor_action" model="ir.actions.act_window">
+        <field name="name">Doctors</field>
+        <field name="res_model">hr.hospital.doctor</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="hr_hospital_doctor_view_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="module_category_hr_hospital" model="ir.module.category">
+        <field name="name">Hospital</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="res_groups_privilege_hospital" model="res.groups.privilege">
+        <field name="name">Hospital</field>
+        <field name="sequence">30</field>
+        <field name="category_id" ref="module_category_hr_hospital"/>
+    </record>
+
+    <record id="group_hr_hospital_patient" model="res.groups">
+        <field name="name">Patient</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="res_groups_privilege_hospital"/>
+        <field name="comment">Can view only their own visits.</field>
+    </record>
+
+    <record id="group_hr_hospital_intern" model="res.groups">
+        <field name="name">Intern</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="res_groups_privilege_hospital"/>
+        <field name="implied_ids" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="comment">Can view and edit their own visits.</field>
+    </record>
+
+    <record id="group_hr_hospital_doctor" model="res.groups">
+        <field name="name">Doctor</field>
+        <field name="sequence">30</field>
+        <field name="privilege_id" ref="res_groups_privilege_hospital"/>
+        <field name="implied_ids" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="comment">Can view and edit their own visits and their interns' visits.</field>
+    </record>
+
+    <record id="group_hr_hospital_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="sequence">40</field>
+        <field name="privilege_id" ref="res_groups_privilege_hospital"/>
+        <field name="implied_ids" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="comment">Can view all visits.</field>
+    </record>
+
+    <record id="group_hr_hospital_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="sequence">50</field>
+        <field name="privilege_id" ref="res_groups_privilege_hospital"/>
+        <field name="implied_ids" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">Has full access, including deleting any data in the module.</field>
+    </record>
+
+    <data noupdate="1">
+
+    <record id="hr_hospital_visit_rule_patient" model="ir.rule">
+        <field name="name">Patient: read own visits</field>
+        <field name="model_id" ref="model_hr_hospital_visit"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('patient_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_visit_rule_intern" model="ir.rule">
+        <field name="name">Intern: read/write own visits</field>
+        <field name="model_id" ref="model_hr_hospital_visit"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_visit_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read/write own and intern visits</field>
+        <field name="model_id" ref="model_hr_hospital_visit"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('doctor_id.user_id', '=', user.id), ('doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_visit_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all visits</field>
+        <field name="model_id" ref="model_hr_hospital_visit"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_visit_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to visits</field>
+        <field name="model_id" ref="model_hr_hospital_visit"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_patient_rule_patient" model="ir.rule">
+        <field name="name">Patient: read own patient card</field>
+        <field name="model_id" ref="model_hr_hospital_patient"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_patient_rule_intern" model="ir.rule">
+        <field name="name">Intern: read patients from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_patient"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('visit_ids.doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_patient_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read patients from own and intern visits</field>
+        <field name="model_id" ref="model_hr_hospital_patient"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('visit_ids.doctor_id.user_id', '=', user.id), ('visit_ids.doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_patient_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all patients</field>
+        <field name="model_id" ref="model_hr_hospital_patient"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_patient_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to patients</field>
+        <field name="model_id" ref="model_hr_hospital_patient"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_doctor_rule_patient" model="ir.rule">
+        <field name="name">Patient: read doctors from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_doctor"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('visit_ids.patient_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_doctor_rule_intern" model="ir.rule">
+        <field name="name">Intern: read own doctor card</field>
+        <field name="model_id" ref="model_hr_hospital_doctor"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_doctor_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read own and intern doctor cards</field>
+        <field name="model_id" ref="model_hr_hospital_doctor"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('user_id', '=', user.id), ('mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_doctor_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all doctors</field>
+        <field name="model_id" ref="model_hr_hospital_doctor"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_doctor_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to doctors</field>
+        <field name="model_id" ref="model_hr_hospital_doctor"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_disease_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to diseases</field>
+        <field name="model_id" ref="model_hr_hospital_disease"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_diagnosis_rule_patient" model="ir.rule">
+        <field name="name">Patient: read diagnoses from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_medical_diagnosis"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('visit_id.patient_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_diagnosis_rule_intern" model="ir.rule">
+        <field name="name">Intern: read diagnoses from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_medical_diagnosis"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('visit_id.doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_diagnosis_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read diagnoses from own and intern visits</field>
+        <field name="model_id" ref="model_hr_hospital_medical_diagnosis"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('visit_id.doctor_id.user_id', '=', user.id), ('visit_id.doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_diagnosis_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all diagnoses</field>
+        <field name="model_id" ref="model_hr_hospital_medical_diagnosis"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_diagnosis_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to diagnoses</field>
+        <field name="model_id" ref="model_hr_hospital_medical_diagnosis"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_schedule_rule_patient" model="ir.rule">
+        <field name="name">Patient: read schedules of doctors from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_schedule"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('doctor_id.visit_ids.patient_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_schedule_rule_intern" model="ir.rule">
+        <field name="name">Intern: read own schedules</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_schedule"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_schedule_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read own and intern schedules</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_schedule"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('doctor_id.user_id', '=', user.id), ('doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_schedule_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all schedules</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_schedule"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_schedule_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to schedules</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_schedule"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_speciality_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to specialities</field>
+        <field name="model_id" ref="model_hr_hospital_doctor_speciality"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_rule_patient" model="ir.rule">
+        <field name="name">Patient: read own contact persons</field>
+        <field name="model_id" ref="model_hr_hospital_contact_person"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('patient_ids.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_rule_intern" model="ir.rule">
+        <field name="name">Intern: read contact persons from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_contact_person"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('patient_ids.visit_ids.doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read contact persons from own and intern visits</field>
+        <field name="model_id" ref="model_hr_hospital_contact_person"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('patient_ids.visit_ids.doctor_id.user_id', '=', user.id), ('patient_ids.visit_ids.doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all contact persons</field>
+        <field name="model_id" ref="model_hr_hospital_contact_person"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_contact_person_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to contact persons</field>
+        <field name="model_id" ref="model_hr_hospital_contact_person"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="hr_hospital_history_rule_patient" model="ir.rule">
+        <field name="name">Patient: read own doctor history</field>
+        <field name="model_id" ref="model_hr_hospital_patient_doctor_history"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_intern') else [('patient_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_patient'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_history_rule_intern" model="ir.rule">
+        <field name="name">Intern: read doctor history from own visits</field>
+        <field name="model_id" ref="model_hr_hospital_patient_doctor_history"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_doctor') else [('patient_id.visit_ids.doctor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_intern'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_history_rule_doctor" model="ir.rule">
+        <field name="name">Doctor: read doctor history from own and intern visits</field>
+        <field name="model_id" ref="model_hr_hospital_patient_doctor_history"/>
+        <field name="domain_force">
+            [(0, '=', 1)] if user.has_group('hr_hospital_horron.group_hr_hospital_manager') else ['|', ('patient_id.visit_ids.doctor_id.user_id', '=', user.id), ('patient_id.visit_ids.doctor_id.mentor_id.user_id', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_doctor'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_history_rule_manager" model="ir.rule">
+        <field name="name">Manager: read all doctor history</field>
+        <field name="model_id" ref="model_hr_hospital_patient_doctor_history"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="hr_hospital_history_rule_admin" model="ir.rule">
+        <field name="name">Admin: full access to doctor history</field>
+        <field name="model_id" ref="model_hr_hospital_patient_doctor_history"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_hr_hospital_admin'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    </data>
+
+</odoo>
